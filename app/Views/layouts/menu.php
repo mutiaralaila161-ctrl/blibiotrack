@@ -11,6 +11,10 @@
             Users
         </a><br>
 
+           <a href="<?= base_url('/buku') ?>"> 
+            Buku 
+           </a><br>
+
     <?php endif; ?>
         <?php $idu = session('id'); ?>
     <a href="<?= base_url('users/edit/' . $idu) ?>">
