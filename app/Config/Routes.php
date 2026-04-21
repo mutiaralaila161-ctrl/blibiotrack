@@ -61,3 +61,25 @@ $routes->post('penulis/store', 'Penulis::store');
 $routes->get('penulis/edit/(:num)', 'Penulis::edit/$1');
 $routes->post('penulis/update/(:num)', 'Penulis::update/$1');
 $routes->get('penulis/delete/(:num)', 'Penulis::delete/$1');
+
+$routes->get('/penerbit', 'Penerbit::index');
+$routes->get('/penerbit/create', 'Penerbit::create');
+$routes->post('/penerbit/store', 'Penerbit::store');
+$routes->get('/penerbit/edit/(:num)', 'Penerbit::edit/$1');
+$routes->post('/penerbit/update/(:num)', 'Penerbit::update/$1');
+$routes->get('/penerbit/delete/(:num)', 'Penerbit::delete/$1');
+
+$routes->get('/anggota', 'Anggota::index');
+$routes->get('/anggota/edit/(:num)', 'Anggota::edit/$1');
+$routes->post('/anggota/update/(:num)', 'Anggota::update/$1');
+$routes->get('/anggota/delete/(:num)', 'Anggota::delete/$1');
+
+$routes->get('/petugas', 'Petugas::index');
+$routes->get('/petugas/edit/(:num)', 'Petugas::edit/$1');
+$routes->post('/petugas/update/(:num)', 'Petugas::update/$1');
+$routes->get('/petugas/delete/(:num)', 'Petugas::delete/$1');
+
+$routes->get('/peminjaman', 'Peminjaman::index');
+$routes->get('/peminjaman/create', 'Peminjaman::create');
+$routes->post('/peminjaman/store', 'Peminjaman::store');
+$routes->get('/peminjaman/kembali/(:num)', 'Peminjaman::kembali/$1');

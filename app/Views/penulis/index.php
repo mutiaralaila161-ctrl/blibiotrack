@@ -12,6 +12,8 @@
 
 <a href="<?= base_url('penulis/create') ?>">Tambah Penulis</a>
 
+<br><br>
+
 <?php if (session()->getFlashdata('success')): ?>
     <div><?= session()->getFlashdata('success') ?></div>
 <?php endif; ?>

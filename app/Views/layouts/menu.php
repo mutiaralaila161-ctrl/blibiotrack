@@ -15,6 +15,10 @@
            Buku
        </a><br>
 
+       <a href="<?= base_url('/peminjaman') ?>">
+           Peminjaman
+       </a><br>
+
        <a href="<?= base_url('/kategori') ?>">
            Kategori
        </a><br>
@@ -22,7 +26,11 @@
        <a href="<?= base_url('/penulis') ?>">
            Penulis
        </a><br>
-      
+
+      <a href="<?= base_url('/penerbit') ?>">
+           Penerbit
+       </a><br>
+
    <?php endif; ?>
 
    <?php $idu = session('id'); ?>

@@ -1,74 +1,129 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
-<h3>Detail Buku</h3>
 
-<table border="1">
-    <tr>
-        <td>ID</td>
-        <td><?= $buku['id_buku'] ?></td>
-    </tr>
-    <tr>
-        <td>Judul</td>
-        <td><?= $buku['judul'] ?></td>
-    </tr>
-    <tr>
-        <td>ISBN</td>
-        <td><?= $buku['isbn'] ?></td>
-    </tr>
-    <tr>
-        <td>Kategori</td>
-        <td><?= $buku['nama_kategori'] ?></td>
-    </tr>
-    <tr>
-        <td>Penulis</td>
-        <td><?= $buku['nama_penulis'] ?></td>
-    </tr>
-    <tr>
-        <td>Penerbit</td>
-        <td><?= $buku['nama_penerbit'] ?></td>
-    </tr>
-    <tr>
-        <td>Rak</td>
-        <td><?= $buku['nama_rak'] ?> - <?= $buku['lokasi'] ?></td>
-    </tr>
-    <tr>
-        <td>Tahun</td>
-        <td><?= $buku['tahun_terbit'] ?></td>
-    </tr>
-    <tr>
-        <td>Jumlah</td>
-        <td><?= $buku['jumlah'] ?></td>
-    </tr>
-    <tr>
-        <td>Tersedia</td>
-        <td><?= $buku['tersedia'] ?></td>
-    </tr>
-    <tr>
-        <td>Deskripsi</td>
-        <td><?= $buku['deskripsi'] ?></td>
-    </tr>
-    <tr>
-        <td>Cover</td>
-        <td>
-            <?php if ($buku['cover']): ?>
+<div style="max-width:800px; margin:auto;">
 
-                <?php $ext = pathinfo($buku['cover'], PATHINFO_EXTENSION); ?>
+    <h3>Detail Buku</h3>
 
-                <?php if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif'])): ?>
-                    <img src="<?= base_url('uploads/buku/' . $buku['cover']) ?>" width="150">
+    <a href="<?= base_url('buku') ?>">← Kembali</a>
+
+    <br><br>
+
+    <?php if (!empty($buku)): ?>
+
+        <div style="display:flex; gap:20px;">
+
+            <!-- ================= COVER ================= -->
+            <div>
+                <?php if (!empty($buku['cover'])): ?>
+                    <img src="<?= base_url('uploads/buku/' . $buku['cover']) ?>"
+                         width="180"
+                         style="border-radius:10px;">
                 <?php else: ?>
-                    <a href="<?= base_url('uploads/buku/' . $buku['cover']) ?>" target="_blank">Lihat File</a>
+                    <div style="width:180px;height:240px;background:#ddd;
+                                display:flex;align-items:center;justify-content:center;">
+                        No Cover
+                    </div>
                 <?php endif; ?>
+            </div>
 
-            <?php else: ?>
-                -
-            <?php endif; ?>
-        </td>
-    </tr>
-</table>
+            <!-- ================= INFO ================= -->
+            <div>
 
-<br>
+                <table border="0" cellpadding="6">
 
-<a href="<?= base_url('buku') ?>">Kembali</a>
-<a href="<?= base_url('buku/wa/' . $buku['id_buku']) ?>" target="_blank">Kirim WA</a>
+                    <tr>
+                        <td><b>ISBN</b></td>
+                        <td>: <?= esc($buku['isbn'] ?? '-') ?></td>
+                    </tr>
+
+                    <tr>
+                        <td><b>Judul</b></td>
+                        <td>: <?= esc($buku['judul'] ?? '-') ?></td>
+                    </tr>
+
+                    <tr>
+                        <td><b>Kategori</b></td>
+                        <td>: <?= esc($buku['nama_kategori'] ?? '-') ?></td>
+                    </tr>
+
+                    <tr>
+                        <td><b>Penulis</b></td>
+                        <td>: <?= esc($buku['nama_penulis'] ?? '-') ?></td>
+                    </tr>
+
+                    <tr>
+                        <td><b>Penerbit</b></td>
+                        <td>: <?= esc($buku['nama_penerbit'] ?? '-') ?></td>
+                    </tr>
+
+                    <tr>
+                        <td><b>Rak</b></td>
+                        <td>: <?= esc($buku['nama_rak'] ?? '-') ?></td>
+                    </tr>
+
+                    <tr>
+                        <td><b>Tahun Terbit</b></td>
+                        <td>: <?= esc($buku['tahun_terbit'] ?? '-') ?></td>
+                    </tr>
+
+                    <tr>
+                        <td><b>Jumlah</b></td>
+                        <td>: <?= esc($buku['jumlah'] ?? '-') ?></td>
+                    </tr>
+
+                    <!-- ================= STOK ================= -->
+                    <tr>
+                        <td><b>Tersedia</b></td>
+                        <td>
+                            :
+                            <?php if (($buku['tersedia'] ?? 0) > 0): ?>
+                                <span style="color:green;">
+                                    Tersedia (<?= esc($buku['tersedia']) ?>)
+                                </span>
+                            <?php else: ?>
+                                <span style="color:red;">Habis</span>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><b>Status</b></td>
+                        <td>
+                            :
+                            <?php if (($buku['tersedia'] ?? 0) > 0): ?>
+                                <span style="color:green;font-weight:bold;">Bisa Dipinjam</span>
+                            <?php else: ?>
+                                <span style="color:red;font-weight:bold;">Tidak Tersedia</span>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+
+                </table>
+
+            </div>
+        </div>
+
+        <br>
+
+        <!-- ================= DESKRIPSI ================= -->
+        <div>
+            <h4>Deskripsi</h4>
+            <p>
+                <?= esc($buku['deskripsi'] ?? 'Tidak ada deskripsi') ?>
+            </p>
+        </div>
+
+        <br>
+
+        <!-- ================= ACTION ================= -->
+        <a href="<?= base_url('buku/edit/' . $buku['id_buku']) ?>">Edit</a>
+        <a href="<?= base_url('buku/wa/' . $buku['id_buku']) ?>" target="_blank">Kirim WA</a>
+
+    <?php else: ?>
+        <p>Data tidak ditemukan</p>
+    <?php endif; ?>
+
+</div>
+
 <?= $this->endSection() ?>

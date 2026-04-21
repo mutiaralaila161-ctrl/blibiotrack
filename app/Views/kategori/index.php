@@ -12,6 +12,8 @@
 
 <a href="<?= base_url('kategori/create') ?>">Tambah Kategori</a>
 
+<br><br>
+
 <?php if (session()->getFlashdata('success')): ?>
     <div><?= session()->getFlashdata('success') ?></div>
 <?php endif; ?>

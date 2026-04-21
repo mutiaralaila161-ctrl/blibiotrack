@@ -14,20 +14,20 @@ class Kategori extends BaseController
     }
 
     public function index()
-    {
-        $keyword = $this->request->getGet('keyword');
+{
+    $keyword = $this->request->getGet('keyword');
 
-        $builder = $this->kategori;
+    $kategori = $this->kategori;
 
-        if ($keyword) {
-            $builder = $builder->like('nama_kategori', $keyword);
-        }
-
-        $data['kategori'] = $builder->paginate(10);
-        $data['pager'] = $this->kategori->pager;
-
-        return view('kategori/index', $data);
+    if ($keyword) {
+        $kategori = $kategori->like('nama_kategori', $keyword);
     }
+
+    $data['kategori'] = $kategori->paginate(10);
+    $data['pager'] = $this->kategori->pager;
+
+    return view('kategori/index', $data);
+}
 
     public function create()
     {
@@ -59,11 +59,10 @@ class Kategori extends BaseController
     }
 
     public function delete($id)
-    {
-        if ($id > 0) {
-            $this->kategori->delete($id);
-        }
+{
+    $this->kategori->delete($id);
 
-        return redirect()->to('/kategori')->with('success', 'Data berhasil dihapus');
-    }
+    return redirect()->to('/kategori')
+        ->with('success', 'Data berhasil dihapus');
+}
 }
