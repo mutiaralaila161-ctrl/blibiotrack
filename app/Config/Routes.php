@@ -83,3 +83,10 @@ $routes->get('/peminjaman', 'Peminjaman::index');
 $routes->get('/peminjaman/create', 'Peminjaman::create');
 $routes->post('/peminjaman/store', 'Peminjaman::store');
 $routes->get('/peminjaman/kembali/(:num)', 'Peminjaman::kembali/$1');
+
+$routes->get('/backup', 'Backup::index');
+
+$routes->get('/restore', 'Restore::index');
+$routes->post('/restore/auth', 'Restore::auth');
+$routes->get('/restore/form', 'Restore::form');
+$routes->post('/restore/process', 'Restore::process');

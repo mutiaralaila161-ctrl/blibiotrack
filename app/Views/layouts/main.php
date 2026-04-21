@@ -34,7 +34,7 @@
 <body>
     <!-- Sidebar -->
     <div id="sidebar" class="sidebar">
-        <?php include(APPPATH . 'Views/layouts/menu.php'); ?>
+        <?= $this->include('layouts/menu') ?>
     </div>
 
     <!-- Konten Utama -->

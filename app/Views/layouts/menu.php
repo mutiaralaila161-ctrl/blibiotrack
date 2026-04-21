@@ -38,6 +38,14 @@
        Setting
    </a><br>
 
+   <?php if (session()->get('role') == 'admin') : ?>
+<a href="<?= base_url('/backup') ?>" class="btn btn-success">Backup Database</a>
+<?php endif; ?>
+
+<a href="<?= base_url('restore') ?>" class="btn btn-outline-danger btn-sm">
+<i class="bi bi-database"></i> Restore DB
+</a>
+
    <li>
        <a href="<?= base_url('/logout') ?>">Log Out</a>
    </li>
