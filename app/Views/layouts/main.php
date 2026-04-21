@@ -34,7 +34,7 @@
 <body>
     <!-- Sidebar -->
     <div id="sidebar" class="sidebar">
-        <?= $this->include('layouts/menu') ?>
+        <?= $this->include('Views/layouts/menu') ?>
     </div>
 
     <!-- Konten Utama -->
