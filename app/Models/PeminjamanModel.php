@@ -17,23 +17,25 @@ class PeminjamanModel extends Model
         'status'
     ];
 
+    // ================= LIST PEMINJAMAN =================
     public function getFullData()
-{
-    return $this->db->table('peminjaman')
-        ->select('
-            peminjaman.id_peminjaman,
-            peminjaman.status,
-            buku.judul,
-            u.nama as anggota,
-            p.nama as petugas
-        ')
-        ->join('detail_peminjaman dp', 'dp.id_peminjaman = peminjaman.id_peminjaman')
-        ->join('buku', 'buku.id_buku = dp.id_buku')
-        ->join('anggota a', 'a.id_anggota = peminjaman.id_anggota')
-        ->join('users u', 'u.id = a.user_id')
-        ->join('petugas pt', 'pt.id_petugas = peminjaman.id_petugas')
-        ->join('users p', 'p.id = pt.user_id')
-        ->get()
-        ->getResultArray();
-}
+    {
+        return $this->db->table('peminjaman')
+            ->select('
+                peminjaman.id_peminjaman,
+                peminjaman.tanggal_pinjam,
+                peminjaman.tanggal_kembali,
+                peminjaman.status,
+                users.nama as anggota,
+                GROUP_CONCAT(buku.judul SEPARATOR ", ") as daftar_buku
+            ')
+            ->join('detail_peminjaman dp', 'dp.id_peminjaman = peminjaman.id_peminjaman')
+            ->join('buku', 'buku.id_buku = dp.id_buku')
+            ->join('anggota a', 'a.id_anggota = peminjaman.id_anggota')
+            ->join('users', 'users.id = a.user_id')
+            ->groupBy('peminjaman.id_peminjaman')
+            ->orderBy('peminjaman.id_peminjaman', 'DESC')
+            ->get()
+            ->getResultArray();
+    }
 }

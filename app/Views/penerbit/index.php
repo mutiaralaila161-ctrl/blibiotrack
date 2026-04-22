@@ -11,7 +11,7 @@
 
 <br>
 
-<a href="<?= base_url('penerbit/create') ?>">Tambah Penerbit</a>
+<a href="<?= base_url('penerbit/create') ?>">+ Tambah Penerbit</a>
 
 <br><br>
 

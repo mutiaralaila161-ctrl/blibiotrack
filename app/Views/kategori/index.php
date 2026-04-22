@@ -10,7 +10,7 @@
 
 <br>
 
-<a href="<?= base_url('kategori/create') ?>">Tambah Kategori</a>
+<a href="<?= base_url('kategori/create') ?>">+ Tambah Kategori</a>
 
 <br><br>
 

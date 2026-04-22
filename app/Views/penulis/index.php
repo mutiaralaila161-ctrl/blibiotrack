@@ -10,7 +10,7 @@
 
 <br>
 
-<a href="<?= base_url('penulis/create') ?>">Tambah Penulis</a>
+<a href="<?= base_url('penulis/create') ?>">+ Tambah Penulis</a>
 
 <br><br>
 

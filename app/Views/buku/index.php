@@ -28,7 +28,7 @@
         </div>
     <?php endif; ?>
 
-    <a href="<?= base_url('buku/create') ?>">Tambah Buku</a>
+    <a href="<?= base_url('buku/create') ?>">+ Tambah Buku</a>
 
     <br><br>
 
@@ -37,6 +37,7 @@
         <thead>
             <tr>
                 <th>No</th>
+                <th>Cover</th>
                 <th>ISBN</th>
                 <th>Judul</th>
                 <th>Kategori</th>
@@ -46,7 +47,6 @@
                 <th>Rak</th>
                 <th>Jumlah</th>
                 <th>Tersedia</th>
-                <th>Cover</th>
                 <th>Aksi</th>
             </tr>
         </thead>
@@ -55,10 +55,23 @@
             <?php if (!empty($buku)): ?>
 
                 <?php $no = 1; ?>
-
                 <?php foreach ($buku as $b): ?>
+
                     <tr>
                         <td><?= $no++ ?></td>
+
+                        <!-- COVER -->
+                        <td>
+                            <?php if (!empty($b['cover'])): ?>
+                                <img 
+                                    src="<?= base_url('uploads/buku/' . $b['cover']) ?>" 
+                                    width="60"
+                                >
+                            <?php else: ?>
+                                -
+                            <?php endif; ?>
+                        </td>
+
                         <td><?= esc($b['isbn'] ?? '-') ?></td>
                         <td><?= esc($b['judul'] ?? '-') ?></td>
                         <td><?= esc($b['nama_kategori'] ?? '-') ?></td>
@@ -69,24 +82,18 @@
                         <td><?= esc($b['jumlah'] ?? '-') ?></td>
                         <td><?= esc($b['tersedia'] ?? '-') ?></td>
 
-                        <!-- COVER -->
-                        <td>
-                            <?php if (!empty($b['cover'])): ?>
-                                <img src="<?= base_url('uploads/buku/' . $b['cover']) ?>" width="60">
-                            <?php else: ?>
-                                -
-                            <?php endif; ?>
-                        </td>
-
                         <!-- AKSI -->
                         <td>
                             <a href="<?= base_url('buku/detail/' . $b['id_buku']) ?>">Detail</a>
                             <a href="<?= base_url('buku/edit/' . $b['id_buku']) ?>">Edit</a>
                             <a href="<?= base_url('buku/wa/' . $b['id_buku']) ?>" target="_blank">WA</a>
                             <a href="<?= base_url('buku/delete/' . $b['id_buku']) ?>"
-                               onclick="return confirm('Hapus buku ini?')">Hapus</a>
+                               onclick="return confirm('Hapus buku ini?')">
+                               Hapus
+                            </a>
                         </td>
                     </tr>
+
                 <?php endforeach; ?>
 
             <?php else: ?>

@@ -79,10 +79,12 @@ $routes->get('/petugas/edit/(:num)', 'Petugas::edit/$1');
 $routes->post('/petugas/update/(:num)', 'Petugas::update/$1');
 $routes->get('/petugas/delete/(:num)', 'Petugas::delete/$1');
 
-$routes->get('/peminjaman', 'Peminjaman::index');
-$routes->get('/peminjaman/create', 'Peminjaman::create');
-$routes->post('/peminjaman/store', 'Peminjaman::store');
-$routes->get('/peminjaman/kembali/(:num)', 'Peminjaman::kembali/$1');
+$routes->get('peminjaman', 'Peminjaman::index');
+$routes->get('peminjaman/create', 'Peminjaman::create');
+$routes->post('peminjaman/store', 'Peminjaman::store');
+$routes->get('peminjaman/kembali/(:num)/(:num)', 'Peminjaman::kembali/$1/$2');
+$routes->get('peminjaman/detail/(:num)', 'Peminjaman::detail/$1');
+$routes->get('peminjaman/delete/(:num)', 'Peminjaman::delete/$1');
 
 $routes->get('/backup', 'Backup::index');
 
