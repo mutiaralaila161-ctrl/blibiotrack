@@ -60,7 +60,7 @@
     <input type="file" name="cover"><br><br>
 
     <button type="submit">Simpan</button>
-    <a href="<?= base_url('buku') ?>">Kembali</a>
+    <a href="<?= base_url('peminjaman') ?>">Kembali</a>
 
 </form>
 <?= $this->endSection() ?>

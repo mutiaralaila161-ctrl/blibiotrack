@@ -32,5 +32,7 @@
 
 <br><br>
 <button type="submit">Pinjam</button>
+    <a href="<?= base_url('buku') ?>">Kembali</a>
+
 
 </form>
