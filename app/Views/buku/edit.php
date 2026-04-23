@@ -1,92 +1,174 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
-<h3>Edit Buku</h3>
+<div class="container py-4">
 
-<form method="post" action="<?= base_url('buku/update/' . $buku['id_buku']) ?>" enctype="multipart/form-data">
+    <div class="card shadow border-0">
 
-    Judul:<br>
-    <input type="text" name="judul" value="<?= esc($buku['judul']) ?>"><br><br>
+        <!-- HEADER -->
+        <div class="card-header bg-light">
+            <h4 class="mb-0">✏️ Edit Buku</h4>
+        </div>
 
-    ISBN:<br>
-    <input type="text" name="isbn" value="<?= esc($buku['isbn']) ?>"><br><br>
+        <div class="card-body">
 
-    Kategori:<br>
-    <select name="id_kategori" required>
-        <option value="">Pilih Kategori</option>
-        <?php foreach ($kategori as $k): ?>
-            <option value="<?= $k['id_kategori'] ?>"
-                <?= ($buku['id_kategori'] == $k['id_kategori']) ? 'selected' : '' ?>>
-                <?= esc($k['nama_kategori']) ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
-    <br><br>
+            <form method="post"
+                  action="<?= base_url('buku/update/' . $buku['id_buku']) ?>"
+                  enctype="multipart/form-data">
 
-    Penulis:<br>
-    <select name="id_penulis" required>
-        <option value="">Pilih Penulis</option>
-        <?php foreach ($penulis as $p): ?>
-            <option value="<?= $p['id_penulis'] ?>"
-                <?= ($buku['id_penulis'] == $p['id_penulis']) ? 'selected' : '' ?>>
-                <?= esc($p['nama_penulis']) ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
-    <br><br>
+                <div class="row g-4">
 
-    Penerbit:<br>
-    <select name="id_penerbit" required>
-        <option value="">Pilih Penerbit</option>
-        <?php foreach ($penerbit as $p): ?>
-            <option value="<?= $p['id_penerbit'] ?>"
-                <?= ($buku['id_penerbit'] == $p['id_penerbit']) ? 'selected' : '' ?>>
-                <?= esc($p['nama_penerbit']) ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
-    <br><br>
+                    <!-- JUDUL -->
+                    <div class="col-md-6">
+                        <label class="form-label">Judul</label>
+                        <input type="text"
+                               name="judul"
+                               class="form-control"
+                               value="<?= esc($buku['judul']) ?>"
+                               required>
+                    </div>
 
-    Rak:<br>
-    <select name="id_rak">
-        <option value="">Pilih Rak</option>
-        <?php foreach ($rak as $r): ?>
-            <option value="<?= $r['id_rak'] ?>"
-                <?= ($buku['id_rak'] ?? null) == $r['id_rak'] ? 'selected' : '' ?>>
-                <?= esc($r['nama_rak']) ?> - <?= esc($r['lokasi']) ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
-    <br><br>
+                    <!-- ISBN -->
+                    <div class="col-md-6">
+                        <label class="form-label">ISBN</label>
+                        <input type="text"
+                               name="isbn"
+                               class="form-control"
+                               value="<?= esc($buku['isbn']) ?>">
+                    </div>
 
-    Tahun:<br>
-    <input type="number" name="tahun_terbit" value="<?= esc($buku['tahun_terbit']) ?>"><br><br>
+                    <!-- KATEGORI -->
+                    <div class="col-md-4">
+                        <label class="form-label">Kategori</label>
+                        <select name="id_kategori" class="form-select" required>
+                            <option value="">Pilih Kategori</option>
+                            <?php foreach ($kategori as $k): ?>
+                                <option value="<?= $k['id_kategori'] ?>"
+                                    <?= ($buku['id_kategori'] == $k['id_kategori']) ? 'selected' : '' ?>>
+                                    <?= esc($k['nama_kategori']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
-    Jumlah:<br>
-    <input type="number" name="jumlah" value="<?= esc($buku['jumlah']) ?>"><br><br>
+                    <!-- PENULIS -->
+                    <div class="col-md-4">
+                        <label class="form-label">Penulis</label>
+                        <select name="id_penulis" class="form-select" required>
+                            <option value="">Pilih Penulis</option>
+                            <?php foreach ($penulis as $p): ?>
+                                <option value="<?= $p['id_penulis'] ?>"
+                                    <?= ($buku['id_penulis'] == $p['id_penulis']) ? 'selected' : '' ?>>
+                                    <?= esc($p['nama_penulis']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
-    Tersedia:<br>
-    <input type="number" name="tersedia" value="<?= esc($buku['tersedia']) ?>"><br><br>
+                    <!-- PENERBIT -->
+                    <div class="col-md-4">
+                        <label class="form-label">Penerbit</label>
+                        <select name="id_penerbit" class="form-select" required>
+                            <option value="">Pilih Penerbit</option>
+                            <?php foreach ($penerbit as $p): ?>
+                                <option value="<?= $p['id_penerbit'] ?>"
+                                    <?= ($buku['id_penerbit'] == $p['id_penerbit']) ? 'selected' : '' ?>>
+                                    <?= esc($p['nama_penerbit']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
-    Deskripsi:<br>
-    <textarea name="deskripsi"><?= esc($buku['deskripsi']) ?></textarea><br><br>
+                    <!-- RAK -->
+                    <div class="col-md-6">
+                        <label class="form-label">Rak</label>
+                        <select name="id_rak" class="form-select">
+                            <option value="">Pilih Rak</option>
+                            <?php foreach ($rak as $r): ?>
+                                <option value="<?= $r['id_rak'] ?>"
+                                    <?= ($buku['id_rak'] ?? null) == $r['id_rak'] ? 'selected' : '' ?>>
+                                    <?= esc($r['nama_rak']) ?> - <?= esc($r['lokasi']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
-    Cover:<br>
-    <input type="file" name="cover"><br><br>
+                    <!-- TAHUN -->
+                    <div class="col-md-2">
+                        <label class="form-label">Tahun</label>
+                        <input type="number"
+                               name="tahun_terbit"
+                               class="form-control"
+                               value="<?= esc($buku['tahun_terbit']) ?>">
+                    </div>
 
-    <b>Cover Saat Ini:</b><br>
+                    <!-- JUMLAH -->
+                    <div class="col-md-2">
+                        <label class="form-label">Jumlah</label>
+                        <input type="number"
+                               name="jumlah"
+                               class="form-control"
+                               value="<?= esc($buku['jumlah']) ?>">
+                    </div>
 
-    <?php if (!empty($buku['cover'])): ?>
-        <img src="<?= base_url('uploads/buku/' . $buku['cover']) ?>" width="120">
-    <?php else: ?>
-        <i>Tidak ada cover</i>
-    <?php endif; ?>
+                    <!-- TERSEDIA -->
+                    <div class="col-md-2">
+                        <label class="form-label">Tersedia</label>
+                        <input type="number"
+                               name="tersedia"
+                               class="form-control"
+                               value="<?= esc($buku['tersedia']) ?>">
+                    </div>
 
-    <br><br>
+                    <!-- DESKRIPSI -->
+                    <div class="col-md-12">
+                        <label class="form-label">Deskripsi</label>
+                        <textarea name="deskripsi"
+                                  class="form-control"
+                                  rows="3"><?= esc($buku['deskripsi']) ?></textarea>
+                    </div>
 
-    <button type="submit">Update</button>
-    <a href="<?= base_url('buku') ?>">Kembali</a>
+                    <!-- COVER -->
+                    <div class="col-md-6">
 
-</form>
+                        <label class="form-label">Cover Baru</label>
+                        <input type="file" name="cover" class="form-control">
+
+                        <div class="mt-3">
+                            <small class="text-muted d-block mb-2">Cover saat ini:</small>
+
+                            <?php if (!empty($buku['cover'])): ?>
+                                <img src="<?= base_url('uploads/buku/' . $buku['cover']) ?>"
+                                     class="img-thumbnail"
+                                     style="width:120px;">
+                            <?php else: ?>
+                                <span class="text-muted">Tidak ada cover</span>
+                            <?php endif; ?>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- BUTTON -->
+                <div class="mt-4 d-flex gap-2">
+
+                    <button type="submit" class="btn btn-primary">
+                        Update
+                    </button>
+
+                    <a href="<?= base_url('buku') ?>" class="btn btn-outline-secondary">
+                        Kembali
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
 
 <?= $this->endSection() ?>

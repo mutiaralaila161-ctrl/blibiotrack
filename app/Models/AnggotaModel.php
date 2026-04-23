@@ -1,8 +1,22 @@
-public function getAnggotaWithUser()
+<?php
+
+namespace App\Models;
+
+use CodeIgniter\Model;
+
+class AnggotaModel extends Model
 {
-    return $this->db->table('anggota')
-        ->select('anggota.*, users.nama, users.email')
-        ->join('users', 'users.id = anggota.user_id', 'left')
-        ->get()
-        ->getResultArray();
+    protected $table = 'anggota';
+    protected $primaryKey = 'id_anggota';
+
+    protected $allowedFields = [['status']
+        'user_id',
+        'nis',
+        'alamat',
+        'no_hp',
+        'tanggal_daftar'
+    ];
+
+    protected $returnType = 'array';
+    protected $useTimestamps = false;
 }

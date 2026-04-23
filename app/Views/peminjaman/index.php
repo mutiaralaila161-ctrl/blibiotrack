@@ -1,89 +1,123 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
-<h2>Data Peminjaman</h2>
+<div>
 
-<a href="<?= base_url('peminjaman/create') ?>">+ Pinjam Buku</a>
+    <h2>📚 Data Peminjaman</h2>
 
-<?php if (session()->getFlashdata('success')): ?>
-    <p style="color:green"><?= esc(session()->getFlashdata('success')) ?></p>
-<?php endif; ?>
+    <br>
 
-<?php if (session()->getFlashdata('error')): ?>
-    <p style="color:red"><?= esc(session()->getFlashdata('error')) ?></p>
-<?php endif; ?>
+    <!-- BUTTON TAMBAH -->
+    <a href="<?= base_url('peminjaman/create') ?>">
+        + Tambah Peminjaman
+    </a>
 
-<br><br>
+    <br><br>
 
-<table border="1" cellpadding="6">
-    <tr>
-        <th>No</th>
-        <th>Anggota</th>
-        <th>Petugas</th>
-        <th>Buku Dipinjam</th>
-        <th>Tanggal Pinjam</th>
-        <th>Tanggal Kembali</th>
-        <th>Status</th>
-        <th>Aksi</th>
-    </tr>
+    <table border="1" cellpadding="5" cellspacing="0">
 
-    <?php if (!empty($peminjaman)): ?>
-        <?php $no = 1; foreach ($peminjaman as $p): ?>
         <tr>
+            <th>No</th>
+            <th>Anggota</th>
+            <th>Petugas</th>
+            <th>Buku</th>
+            <th>Tanggal</th>
+            <th>Status</th>
+            <th>Aksi</th>
+        </tr>
 
-            <td><?= $no++ ?></td>
-            <td><?= esc($p['anggota']) ?></td>
-            <td><?= esc($p['petugas'] ?? '-') ?></td>
-            <td><?= esc($p['daftar_buku'] ?? '-') ?></td>
-            <td><?= esc($p['tanggal_pinjam']) ?></td>
-            <td><?= esc($p['tanggal_kembali'] ?? '-') ?></td>
+        <?php if (!empty($peminjaman)): ?>
 
-            <td>
-                <?php if ($p['status'] == 'dipinjam'): ?>
-                    <span style="color:red">Dipinjam</span>
-                <?php else: ?>
-                    <span style="color:green">Kembali</span>
-                <?php endif; ?>
-            </td>
+            <?php $no = 1; foreach ($peminjaman as $p): ?>
 
-            <!-- ================= PENTING: SEMUA AKSI HARUS DI SINI ================= -->
-            <td>
+            <tr>
 
-                <a href="<?= base_url('peminjaman/detail/' . $p['id_peminjaman']) ?>">
-                    Detail
-                </a>
+                <td><?= $no++ ?></td>
 
-                |
+                <td><?= esc($p['nama_anggota'] ?? '-') ?></td>
+                <td><?= esc($p['nama_petugas'] ?? '-') ?></td>
 
-                <?php if ($p['status'] == 'dipinjam'): ?>
-                    <a href="<?= base_url('peminjaman/kembali/' . $p['id_peminjaman']) ?>"
-                       onclick="return confirm('Kembalikan buku ini?')"
-                       style="color:green">
-                        Return
+                <!-- BUKU -->
+                <td>
+                    <?php if (!empty($p['detail'])): ?>
+                        <?php foreach ($p['detail'] as $d): ?>
+
+                            <div>
+                                <img src="<?= base_url('uploads/buku/' . ($d['cover'] ?? 'default.png')) ?>"
+                                     width="40">
+                                <br>
+                                <?= esc($d['judul']) ?>
+                            </div>
+                            <hr>
+
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        Tidak ada buku
+                    <?php endif; ?>
+                </td>
+
+                <!-- TANGGAL -->
+                <td>
+                    Pinjam: <?= esc($p['tanggal_pinjam']) ?><br>
+                    Kembali: <?= esc($p['tanggal_kembali']) ?><br>
+
+                    <?php if (!empty($p['notifikasi'])): ?>
+                        ⚠️ <?= $p['notifikasi'] ?>
+                    <?php endif; ?>
+                </td>
+
+                <!-- STATUS -->
+                <td>
+                    <?php if ($p['status_label'] == 'Terlambat'): ?>
+                        Terlambat
+                    <?php elseif ($p['status_label'] == 'Hampir Telat'): ?>
+                        Hampir Telat
+                    <?php elseif ($p['status_label'] == 'Kembali'): ?>
+                        Kembali
+                    <?php else: ?>
+                        Dipinjam
+                    <?php endif; ?>
+                </td>
+
+                <!-- AKSI -->
+                <td>
+
+                    <a href="<?= base_url('peminjaman/detail/'.$p['id_peminjaman']) ?>">
+                        Detail
                     </a>
-                <?php else: ?>
-                    <span>-</span>
-                <?php endif; ?>
 
-                |
+                    |
 
-                <a href="<?= base_url('peminjaman/delete/' . $p['id_peminjaman']) ?>"
-                   onclick="return confirm('Hapus data peminjaman ini?')"
-                   style="color:red">
-                    Hapus
-                </a>
+                    <?php if ($p['status'] != 'kembali'): ?>
+                        <a href="<?= base_url('pengembalian/form/'.$p['id_peminjaman']) ?>">
+                            Kembalikan
+                        </a>
+                    <?php endif; ?>
 
-            </td>
-            <!-- ================= END AKSI ================= -->
+                    <!-- DENDA -->
+                    <?php if ($p['status'] == 'kembali' && !empty($p['id_pengembalian'])): ?>
+                        |
+                        <a href="<?= base_url('denda/create/'.$p['id_pengembalian']) ?>">
+                            Denda
+                        </a>
+                    <?php endif; ?>
 
-        </tr>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <tr>
-            <td colspan="8" style="text-align:center">Belum ada data</td>
-        </tr>
-    <?php endif; ?>
+                </td>
 
-</table>
+            </tr>
+
+            <?php endforeach; ?>
+
+        <?php else: ?>
+
+            <tr>
+                <td colspan="7">Belum ada data peminjaman</td>
+            </tr>
+
+        <?php endif; ?>
+
+    </table>
+
+</div>
 
 <?= $this->endSection() ?>

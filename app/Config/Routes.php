@@ -38,6 +38,9 @@ $routes->get('users/detail/(:num)', 'Users::detail/$1', $allRole); // aksi detai
 $routes->get('users/print', 'Users::print', $allRole); // aksi print data user
 $routes->get('users/wa/(:num)', 'Users::wa/$1', $allRole); // aksi kirim ke whatsapp
 
+$routes->get('users/aktifkan/(:num)', 'Users::aktifkan/$1');
+$routes->get('users/nonaktifkan/(:num)', 'Users::nonaktifkan/$1');
+
 $routes->get('buku', 'Buku::index');
 $routes->get('buku/create', 'Buku::create');
 $routes->post('buku/store', 'Buku::store');
@@ -62,33 +65,41 @@ $routes->get('penulis/edit/(:num)', 'Penulis::edit/$1');
 $routes->post('penulis/update/(:num)', 'Penulis::update/$1');
 $routes->get('penulis/delete/(:num)', 'Penulis::delete/$1');
 
-$routes->get('/penerbit', 'Penerbit::index');
-$routes->get('/penerbit/create', 'Penerbit::create');
-$routes->post('/penerbit/store', 'Penerbit::store');
-$routes->get('/penerbit/edit/(:num)', 'Penerbit::edit/$1');
-$routes->post('/penerbit/update/(:num)', 'Penerbit::update/$1');
-$routes->get('/penerbit/delete/(:num)', 'Penerbit::delete/$1');
+$routes->get('penerbit', 'Penerbit::index');
+$routes->get('penerbit/create', 'Penerbit::create');
+$routes->post('penerbit/store', 'Penerbit::store');
+$routes->get('penerbit/edit/(:num)', 'Penerbit::edit/$1');
+$routes->post('penerbit/update/(:num)', 'Penerbit::update/$1');
+$routes->get('penerbit/delete/(:num)', 'Penerbit::delete/$1');
 
-$routes->get('/anggota', 'Anggota::index');
-$routes->get('/anggota/edit/(:num)', 'Anggota::edit/$1');
-$routes->post('/anggota/update/(:num)', 'Anggota::update/$1');
-$routes->get('/anggota/delete/(:num)', 'Anggota::delete/$1');
+$routes->get('rak', 'Rak::index');
+$routes->get('rak/create', 'Rak::create');
+$routes->post('rak/store', 'Rak::store');
+$routes->get('rak/edit/(:num)', 'Rak::edit/$1');
+$routes->post('rak/update/(:num)', 'Rak::update/$1');
+$routes->get('rak/delete/(:num)', 'Rak::delete/$1');
 
-$routes->get('/petugas', 'Petugas::index');
-$routes->get('/petugas/edit/(:num)', 'Petugas::edit/$1');
-$routes->post('/petugas/update/(:num)', 'Petugas::update/$1');
-$routes->get('/petugas/delete/(:num)', 'Petugas::delete/$1');
+// ================= PEMINJAMAN =================
+$routes->group('peminjaman', ['filter' => 'role:admin,petugas,anggota'], function($routes) {
 
-$routes->get('peminjaman', 'Peminjaman::index');
-$routes->get('peminjaman/create', 'Peminjaman::create');
-$routes->post('peminjaman/store', 'Peminjaman::store');
-$routes->get('peminjaman/kembali/(:num)/(:num)', 'Peminjaman::kembali/$1/$2');
-$routes->get('peminjaman/detail/(:num)', 'Peminjaman::detail/$1');
-$routes->get('peminjaman/delete/(:num)', 'Peminjaman::delete/$1');
+    $routes->get('/', 'Peminjaman::index');
+    $routes->get('create', 'Peminjaman::create');
+    $routes->post('save', 'Peminjaman::save');
+    $routes->get('detail/(:num)', 'Peminjaman::detail/$1');
+    $routes->get('kembali-all/(:num)', 'Peminjaman::kembaliAll/$1');
+    $routes->get('delete/(:num)', 'Peminjaman::delete/$1');
 
-$routes->get('/backup', 'Backup::index');
+});
 
-$routes->get('/restore', 'Restore::index');
-$routes->post('/restore/auth', 'Restore::auth');
-$routes->get('/restore/form', 'Restore::form');
-$routes->post('/restore/process', 'Restore::process');
+// ================= PENGEMBALIAN =================
+$routes->group('pengembalian', function ($routes) {
+
+    // halaman utama pengembalian (FIX ERROR 404)
+    $routes->get('/', 'Pengembalian::index');
+
+    $routes->get('form/(:num)', 'Pengembalian::form/$1');
+    $routes->get('proses/(:num)', 'Pengembalian::proses/$1');
+});
+$routes->get('denda', 'Denda::index');
+$routes->get('denda/detail/(:num)', 'Denda::detail/$1');
+$routes->get('denda/bayar/(:num)', 'Denda::bayar/$1');

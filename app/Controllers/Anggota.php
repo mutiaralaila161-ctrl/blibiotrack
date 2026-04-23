@@ -99,9 +99,30 @@ class Anggota extends BaseController
 
         if ($anggota) {
             $this->user->delete($anggota['user_id']);
-            $this->anggota->delete($id);
+            $this->anggota->update($id, [
+    'status' => 'nonaktif'
+]);
+
+return redirect()->back()->with('success', 'Anggota dinonaktifkan');
+
+public function aktifkan($id)
+{
+    $this->anggota->update($id, [
+        'status' => 'aktif'
+    ]);
+
+    return redirect()->back()->with('success', 'Anggota berhasil diaktifkan');
+}
         }
 
         return redirect()->to('/anggota');
     }
+    public function nonaktifkan($id)
+{
+    $this->anggota->update($id, [
+        'status' => 'nonaktif'
+    ]);
+
+    return redirect()->back()->with('success', 'Anggota dinonaktifkan');
+}
 }

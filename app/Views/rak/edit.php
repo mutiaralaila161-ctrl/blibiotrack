@@ -7,24 +7,32 @@
 
         <!-- HEADER -->
         <div class="card-header">
-            <h4 class="mb-0">✏️ Edit Penulis</h4>
+            <h4 class="mb-0">✏️ Edit Rak</h4>
         </div>
 
         <div class="card-body">
 
-            <form method="post"
-                  action="<?= base_url('penulis/update/' . $penulis['id_penulis']) ?>">
+            <form action="<?= base_url('rak/update/' . $rak['id_rak']) ?>" method="post">
 
                 <div class="row g-3">
 
-                    <!-- NAMA PENULIS -->
+                    <!-- NAMA RAK -->
                     <div class="col-md-6">
-                        <label class="form-label">Nama Penulis</label>
+                        <label class="form-label">Nama Rak</label>
                         <input type="text"
-                               name="nama_penulis"
+                               name="nama_rak"
                                class="form-control"
-                               value="<?= esc($penulis['nama_penulis']) ?>"
+                               value="<?= esc($rak['nama_rak']) ?>"
                                required>
+                    </div>
+
+                    <!-- LOKASI -->
+                    <div class="col-md-6">
+                        <label class="form-label">Lokasi</label>
+                        <input type="text"
+                               name="lokasi"
+                               class="form-control"
+                               value="<?= esc($rak['lokasi']) ?>">
                     </div>
 
                 </div>
@@ -36,7 +44,7 @@
                         Update
                     </button>
 
-                    <a href="<?= base_url('penulis') ?>" class="btn btn-secondary">
+                    <a href="<?= base_url('rak') ?>" class="btn btn-secondary">
                         Kembali
                     </a>
 

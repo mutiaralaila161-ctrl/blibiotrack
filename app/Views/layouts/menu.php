@@ -12,10 +12,16 @@
 
         <a href="<?= base_url('/users') ?>">Users</a><br>
         <a href="<?= base_url('/buku') ?>">Buku</a><br>
-        <a href="<?= base_url('/peminjaman') ?>">Peminjaman</a><br>
+        <?php if (in_array(session()->get('role'), ['admin','petugas','anggota'])): ?>
+        <a href="<?= base_url('peminjaman') ?>">Peminjaman</a>
+<?php endif; ?>
+        <a href="<?= base_url('/pengembalian') ?>">Pengembalian</a><br>
+        <a href="<?= base_url('denda') ?>">Denda</a><br>
+        <a href="<?= base_url('/rak') ?>">Rak</a><br>
         <a href="<?= base_url('/kategori') ?>">Kategori</a><br>
         <a href="<?= base_url('/penulis') ?>">Penulis</a><br>
         <a href="<?= base_url('/penerbit') ?>">Penerbit</a><br>
+        
 
         <?php if (session()->get('role') == 'admin') : ?>
             <a href="<?= base_url('/backup') ?>" class="btn btn-success btn-sm mb-1">Backup Database</a><br>
