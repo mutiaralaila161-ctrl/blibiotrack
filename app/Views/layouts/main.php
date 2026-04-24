@@ -19,14 +19,14 @@
 
         .sidebar {
             width: 150px;
-            background-color: #fffbd5ff;
+            background-color: rgb(243, 236, 200);
             position: relative;
         }
 
         .content {
             flex-grow: 1;
             padding: 15px;
-            background-color: #f8f9fa;
+            background-color: #fceff5;
         }
     </style>
 </head>

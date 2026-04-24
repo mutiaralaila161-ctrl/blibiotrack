@@ -7,14 +7,13 @@
 
     <br>
 
-    <!-- BUTTON TAMBAH -->
     <a href="<?= base_url('peminjaman/create') ?>">
         + Tambah Peminjaman
     </a>
 
     <br><br>
 
-    <table border="1" cellpadding="5" cellspacing="0">
+    <table border="1" cellpadding="6" cellspacing="0">
 
         <tr>
             <th>No</th>
@@ -23,6 +22,7 @@
             <th>Buku</th>
             <th>Tanggal</th>
             <th>Status</th>
+            <th>Denda</th>
             <th>Aksi</th>
         </tr>
 
@@ -39,21 +39,13 @@
 
                 <!-- BUKU -->
                 <td>
-                    <?php if (!empty($p['detail'])): ?>
-                        <?php foreach ($p['detail'] as $d): ?>
-
-                            <div>
-                                <img src="<?= base_url('uploads/buku/' . ($d['cover'] ?? 'default.png')) ?>"
-                                     width="40">
-                                <br>
-                                <?= esc($d['judul']) ?>
-                            </div>
-                            <hr>
-
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        Tidak ada buku
-                    <?php endif; ?>
+                    <?php foreach ($p['detail'] as $d): ?>
+                        <div>
+                            <img src="<?= base_url('uploads/buku/' . ($d['cover'] ?? 'default.png')) ?>" width="40"><br>
+                            <?= esc($d['judul']) ?>
+                        </div>
+                        <hr>
+                    <?php endforeach; ?>
                 </td>
 
                 <!-- TANGGAL -->
@@ -68,14 +60,41 @@
 
                 <!-- STATUS -->
                 <td>
-                    <?php if ($p['status_label'] == 'Terlambat'): ?>
-                        Terlambat
+                    <?php if ($p['status_label'] == 'Kembali'): ?>
+                        <span style="color:green;">Kembali</span>
+                    <?php elseif ($p['status_label'] == 'Terlambat'): ?>
+                        <span style="color:red;">Terlambat</span>
                     <?php elseif ($p['status_label'] == 'Hampir Telat'): ?>
-                        Hampir Telat
-                    <?php elseif ($p['status_label'] == 'Kembali'): ?>
-                        Kembali
+                        <span style="color:orange;">Hampir Telat</span>
                     <?php else: ?>
-                        Dipinjam
+                        <span style="color:blue;">Dipinjam</span>
+                    <?php endif; ?>
+                </td>
+
+                <!-- DENDA -->
+                <td>
+                    <?php if (!empty($p['tanggal_dikembalikan'])): ?>
+
+                        <?php if (($p['denda'] ?? 0) > 0): ?>
+
+                            Rp <?= number_format($p['denda'],0,',','.') ?><br>
+
+                            <?php if (($p['status_pengembalian'] ?? 'belum_lunas') == 'belum_lunas'): ?>
+                                <span style="color:red;">Belum Lunas</span><br>
+                                <a href="<?= base_url('denda/bayar/'.$p['id_peminjaman']) ?>"
+                                   onclick="return confirm('Bayar denda?')">
+                                   Bayar
+                                </a>
+                            <?php else: ?>
+                                <span style="color:green;">Lunas</span>
+                            <?php endif; ?>
+
+                        <?php else: ?>
+                            <span style="color:green;">Tidak ada</span>
+                        <?php endif; ?>
+
+                    <?php else: ?>
+                        -
                     <?php endif; ?>
                 </td>
 
@@ -86,19 +105,10 @@
                         Detail
                     </a>
 
-                    |
-
                     <?php if ($p['status'] != 'kembali'): ?>
+                        | 
                         <a href="<?= base_url('pengembalian/form/'.$p['id_peminjaman']) ?>">
                             Kembalikan
-                        </a>
-                    <?php endif; ?>
-
-                    <!-- DENDA -->
-                    <?php if ($p['status'] == 'kembali' && !empty($p['id_pengembalian'])): ?>
-                        |
-                        <a href="<?= base_url('denda/create/'.$p['id_pengembalian']) ?>">
-                            Denda
                         </a>
                     <?php endif; ?>
 
@@ -111,7 +121,7 @@
         <?php else: ?>
 
             <tr>
-                <td colspan="7">Belum ada data peminjaman</td>
+                <td colspan="8">Belum ada data peminjaman</td>
             </tr>
 
         <?php endif; ?>

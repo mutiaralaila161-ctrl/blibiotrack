@@ -103,3 +103,10 @@ $routes->group('pengembalian', function ($routes) {
 $routes->get('denda', 'Denda::index');
 $routes->get('denda/detail/(:num)', 'Denda::detail/$1');
 $routes->get('denda/bayar/(:num)', 'Denda::bayar/$1');
+
+$routes->get('/backup', 'Backup::index');
+
+$routes->get('/restore', 'Restore::index');
+$routes->post('/restore/auth', 'Restore::auth');
+$routes->get('/restore/form', 'Restore::form');
+$routes->post('/restore/process', 'Restore::process');

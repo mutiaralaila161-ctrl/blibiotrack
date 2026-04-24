@@ -31,6 +31,8 @@
 
         <button type="submit">Cari</button>
         <a href="<?= base_url('users') ?>">Reset</a>
+        <a href="<?= base_url('users/print?' . http_build_query($_GET)) ?>" target="_blank">
+            Print </a>
 
     </form>
 
@@ -83,11 +85,11 @@
 
                 <!-- FOTO -->
                 <td>
-                    <?php if (!empty($u['foto'])): ?>
-                        <img src="<?= base_url('uploads/users/' . $u['foto']) ?>" width="40" height="40">
+                    <?php if (!empty($u['foto']) && file_exists(FCPATH . 'uploads/users/' . $u['foto'])): ?>
+                    <img src="<?= base_url('uploads/users/' . $u['foto']) ?>" width="40" height="40">
                     <?php else: ?>
-                        -
-                    <?php endif; ?>
+    -
+    <?php endif; ?>
                 </td>
 
                 <!-- AKSI -->

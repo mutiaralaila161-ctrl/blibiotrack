@@ -175,6 +175,33 @@ class Users extends BaseController
             'user' => $this->users->find($id)
         ]);
     }
+    // ================= PRINT DATA =================
+    public function print()
+    {
+        // Ambil filter
+        $keyword = $this->request->getGet('keyword');
+        $role = $this->request->getGet('role');
+
+        // Builder query
+        $builder = $this->users;
+
+        // Filter keyword
+        if ($keyword) {
+            $builder = $builder->like('nama', $keyword);
+        }
+
+        // Filter role
+        if ($role) {
+            $builder = $builder->where('role', $role);
+        }
+
+        // Ambil semua data (tanpa pagination)
+        $data['users'] = $builder->findAll();
+
+        // Tampilkan view print
+        return view('users/print', $data);
+    }
+
 
     // ================= WA =================
     public function wa($id)
