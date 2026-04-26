@@ -1,50 +1,89 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
-<div>
+<div class="container py-4">
 
-    <h3>Detail User</h3>
+    <div class="row justify-content-center">
 
-    <table border="1" cellpadding="5" cellspacing="0">
-        <tr>
-            <td>Nama</td>
-            <td><?= $user['nama'] ?></td>
-        </tr>
-        <tr>
-            <td>Email</td>
-            <td><?= $user['email'] ?></td>
-        </tr>
-        <tr>
-            <td>Username</td>
-            <td><?= $user['username'] ?></td>
-        </tr>
-        <tr>
-            <td>password</td>
-            <td>***</td>
-        </tr>
-        <tr>
-            <td>Role</td>
-            <td><?= ucfirst($user['role']) ?></td>
-        </tr>
-        <tr>
-            <td>Foto</td>
-            <td>
-                <?php if ($user['foto']): ?>
-                    <img src="<?= base_url('uploads/users/' . $user['foto']) ?>" width="100">
-                <?php else: ?>
-                    -
-                <?php endif; ?>
-            </td>
-        </tr>
-    </table>
+        <div class="col-md-8">
 
-    <br>
+            <div class="card shadow-sm border-0">
 
-    <a href="<?= base_url('users') ?>">Kembali</a>
+                <!-- HEADER -->
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-person-badge"></i> Detail User
+                    </h5>
+                </div>
 
-    <?php if (session()->get('role') == 'admin') : ?>
-        <a href="<?= base_url('users/edit/' . $user['id']) ?>">Edit</a>
-    <?php endif; ?>
+                <div class="card-body text-center">
+
+                    <!-- FOTO -->
+                    <div class="mb-3">
+                        <?php if (!empty($user['foto'])): ?>
+                            <img src="<?= base_url('uploads/users/' . $user['foto']) ?>"
+                                 class="rounded-circle border shadow"
+                                 width="120"
+                                 height="120"
+                                 style="object-fit: cover;">
+                        <?php else: ?>
+                            <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto"
+                                 style="width:120px;height:120px;">
+                                <i class="bi bi-person fs-1"></i>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+
+                    <h5 class="fw-bold mb-1"><?= esc($user['nama']) ?></h5>
+                    <p class="text-muted mb-3"><?= esc($user['email']) ?></p>
+
+                    <!-- ROLE BADGE -->
+                    <span class="badge bg-primary mb-3">
+                        <?= ucfirst($user['role']) ?>
+                    </span>
+
+                    <!-- DETAIL INFO -->
+                    <div class="list-group text-start mt-3">
+
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span>Username</span>
+                            <strong><?= esc($user['username']) ?></strong>
+                        </div>
+
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span>Password</span>
+                            <span class="text-muted">••••••••</span>
+                        </div>
+
+                        <div class="list-group-item d-flex justify-content-between">
+                            <span>Role</span>
+                            <span><?= ucfirst($user['role']) ?></span>
+                        </div>
+
+                    </div>
+
+                    <!-- BUTTON -->
+                    <div class="mt-4 d-flex justify-content-between">
+
+                        <a href="<?= base_url('users') ?>" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Kembali
+                        </a>
+
+                        <?php if (session()->get('role') == 'admin') : ?>
+                            <a href="<?= base_url('users/edit/' . $user['id']) ?>" class="btn btn-warning">
+                                <i class="bi bi-pencil-square"></i> Edit
+                            </a>
+                        <?php endif; ?>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 

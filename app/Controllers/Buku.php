@@ -15,15 +15,19 @@ class Buku extends BaseController
         $this->db = db_connect();
     }
 
-    // ================= INDEX =================
+    // ================= INDEX (PAGINATION FIX) =================
     public function index()
-    {
-        $keyword = $this->request->getGet('keyword');
+{
+    $keyword = $this->request->getGet('keyword');
 
-        return view('buku/index', [
-            'buku' => $this->buku->getBuku($keyword)
-        ]);
-    }
+    $builder = $this->buku->getBukuPaginate($keyword);
+
+    return view('buku/index', [
+        'buku' => $this->buku->paginate(10), // ✅ paginate dari MODEL
+        'pager' => $this->buku->pager,
+        'keyword' => $keyword
+    ]);
+}
 
     // ================= CREATE =================
     public function create()
@@ -39,22 +43,6 @@ class Buku extends BaseController
     // ================= STORE =================
     public function store()
     {
-        $rules = [
-            'isbn' => 'required',
-            'judul' => 'required',
-            'id_kategori' => 'required',
-            'id_penulis' => 'required',
-            'id_penerbit' => 'required',
-            'id_rak' => 'required',
-            'jumlah' => 'required|numeric'
-        ];
-
-        if (!$this->validate($rules)) {
-            return redirect()->back()->withInput()
-                ->with('validation', $this->validator);
-        }
-
-        // upload cover
         $file = $this->request->getFile('cover');
         $namaFile = null;
 
@@ -63,7 +51,6 @@ class Buku extends BaseController
             $file->move('uploads/buku', $namaFile);
         }
 
-        // insert buku
         $this->buku->insert([
             'isbn' => $this->request->getPost('isbn'),
             'judul' => $this->request->getPost('judul'),
@@ -78,14 +65,9 @@ class Buku extends BaseController
         ]);
 
         $id_buku = $this->buku->getInsertID();
-        $id_rak  = $this->request->getPost('id_rak');
+        $id_rak = $this->request->getPost('id_rak');
 
-        // cegah duplicate rak
-        $cek = $this->db->table('buku_rak')
-            ->where(['id_buku' => $id_buku, 'id_rak' => $id_rak])
-            ->get()->getRow();
-
-        if (!$cek && $id_rak) {
+        if ($id_rak) {
             $this->db->table('buku_rak')->insert([
                 'id_buku' => $id_buku,
                 'id_rak' => $id_rak
@@ -95,17 +77,35 @@ class Buku extends BaseController
         return redirect()->to('/buku')->with('success', 'Data berhasil ditambahkan');
     }
 
-    // ================= EDIT =================
-    public function edit($id)
-    {
-        return view('buku/edit', [
-            'buku' => $this->buku->find($id),
-            'kategori' => $this->db->table('kategori')->get()->getResultArray(),
-            'penulis'  => $this->db->table('penulis')->get()->getResultArray(),
-            'penerbit' => $this->db->table('penerbit')->get()->getResultArray(),
-            'rak'      => $this->db->table('rak')->get()->getResultArray(),
-        ]);
+    // ================= DETAIL (FIXED CLEAN VERSION) =================
+    public function detail($id)
+{
+    $buku = $this->db->table('buku')
+        ->select('
+            buku.*,
+            kategori.nama_kategori,
+            penulis.nama_penulis,
+            penerbit.nama_penerbit,
+            rak.nama_rak
+        ')
+        ->join('kategori', 'kategori.id_kategori = buku.id_kategori', 'left')
+        ->join('penulis', 'penulis.id_penulis = buku.id_penulis', 'left')
+        ->join('penerbit', 'penerbit.id_penerbit = buku.id_penerbit', 'left')
+        ->join('buku_rak', 'buku_rak.id_buku = buku.id_buku', 'left')
+        ->join('rak', 'rak.id_rak = buku_rak.id_rak', 'left')
+        ->where('buku.id_buku', $id)
+        ->get()
+        ->getRowArray();
+
+    if (!$buku) {
+        return redirect()->to('/buku')->with('error', 'Data tidak ditemukan');
     }
+
+    return view('buku/detail', [
+        'buku' => $buku,
+        'title' => 'Detail Buku'
+    ]);
+}
 
     // ================= UPDATE =================
     public function update($id)
@@ -116,12 +116,10 @@ class Buku extends BaseController
             return redirect()->to('/buku')->with('error', 'Data tidak ditemukan');
         }
 
-        // cover
         $file = $this->request->getFile('cover');
         $namaFile = $buku['cover'];
 
         if ($file && $file->isValid() && !$file->hasMoved()) {
-
             if (!empty($namaFile) && file_exists(FCPATH . 'uploads/buku/' . $namaFile)) {
                 unlink(FCPATH . 'uploads/buku/' . $namaFile);
             }
@@ -145,18 +143,6 @@ class Buku extends BaseController
             'deskripsi' => $this->request->getPost('deskripsi'),
             'cover' => $namaFile
         ]);
-
-        // update rak (clean)
-        $id_rak = $this->request->getPost('id_rak');
-
-        if ($id_rak) {
-            $this->db->table('buku_rak')->where('id_buku', $id)->delete();
-
-            $this->db->table('buku_rak')->insert([
-                'id_buku' => $id,
-                'id_rak' => $id_rak
-            ]);
-        }
 
         return redirect()->to('/buku')->with('success', 'Data berhasil diupdate');
     }
@@ -184,26 +170,6 @@ class Buku extends BaseController
         return redirect()->to('/buku')->with('success', 'Data berhasil dihapus');
     }
 
-    // ================= DETAIL (FIXED) =================
-    public function detail($id)
-    {
-        $buku = $this->db->table('buku')
-            ->select('buku.*, kategori.nama_kategori, penulis.nama_penulis, penerbit.nama_penerbit, rak.nama_rak')
-            ->join('kategori', 'kategori.id_kategori = buku.id_kategori', 'left')
-            ->join('penulis', 'penulis.id_penulis = buku.id_penulis', 'left')
-            ->join('penerbit', 'penerbit.id_penerbit = buku.id_penerbit', 'left')
-            ->join('buku_rak', 'buku_rak.id_buku = buku.id_buku', 'left')
-            ->join('rak', 'rak.id_rak = buku_rak.id_rak', 'left')
-            ->where('buku.id_buku', $id)
-            ->get()->getRowArray();
-
-        if (!$buku) {
-            return redirect()->to('/buku')->with('error', 'Data tidak ditemukan');
-        }
-
-        return view('buku/detail', ['buku' => $buku]);
-    }
-
     // ================= PRINT =================
     public function print()
     {
@@ -220,7 +186,8 @@ class Buku extends BaseController
             ->join('buku_rak', 'buku_rak.id_buku = buku.id_buku', 'left')
             ->join('rak', 'rak.id_rak = buku_rak.id_rak', 'left')
             ->where('buku.id_buku', $id)
-            ->get()->getRowArray();
+            ->get()
+            ->getRowArray();
 
         if (!$b) {
             return redirect()->to('/buku')->with('error', 'Data tidak ditemukan');

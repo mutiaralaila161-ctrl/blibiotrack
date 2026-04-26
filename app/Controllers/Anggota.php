@@ -13,7 +13,7 @@ class Anggota extends BaseController
     public function __construct()
     {
         $this->anggota = new AnggotaModel();
-        $this->user = new UsersModel(); // pakai ini
+        $this->user = new UsersModel();
     }
 
     // ================= INDEX =================
@@ -23,106 +23,106 @@ class Anggota extends BaseController
         return view('anggota/index', $data);
     }
 
-    // ================= CREATE =================
+    // ================= EDIT =================
     public function edit($id)
-{
-    $anggota = $this->anggota->find($id);
+    {
+        $anggota = $this->anggota->find($id);
+        $user = $this->user->find($anggota['user_id']);
 
-    // ambil data user juga
-    $user = $this->user->find($anggota['user_id']);
-
-    $data = [
-        'anggota' => $anggota,
-        'user'    => $user
-    ];
-
-    return view('anggota/edit', $data);
-}
+        return view('anggota/edit', [
+            'anggota' => $anggota,
+            'user'    => $user
+        ]);
+    }
 
     // ================= STORE =================
     public function store()
     {
-        // 1. simpan ke users
         $user_id = $this->user->insert([
             'nama'     => $this->request->getPost('nama'),
             'email'    => $this->request->getPost('email'),
             'username' => $this->request->getPost('username'),
             'password' => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
-            'role'     => 'anggota', // penting
-            'status'   => 1
+            'role'     => 'anggota',
+            'status'   => 'aktif'
         ]);
 
-        // 2. simpan ke anggota
         $this->anggota->insert([
-            'user_id'        => $user_id,
-            'nis'            => $this->request->getPost('nis'),
-            'alamat'         => $this->request->getPost('alamat'),
-            'no_hp'          => $this->request->getPost('no_hp'),
+            'user_id' => $user_id,
+            'nis'     => $this->request->getPost('nis'),
+            'alamat'  => $this->request->getPost('alamat'),
+            'no_hp'   => $this->request->getPost('no_hp'),
             'tanggal_daftar' => date('Y-m-d'),
         ]);
 
         return redirect()->to('/anggota');
     }
 
+    // ================= UPDATE =================
     public function update($id)
-{
-    $anggota = $this->anggota->find($id);
+    {
+        $anggota = $this->anggota->find($id);
 
-    // ================= UPDATE USERS =================
-    $this->user->update($anggota['user_id'], [
-        'nama'     => $this->request->getPost('nama'),
-        'email'    => $this->request->getPost('email'),
-        'username' => $this->request->getPost('username'),
-    ]);
-
-    // update password kalau diisi
-    if ($this->request->getPost('password')) {
         $this->user->update($anggota['user_id'], [
-            'password' => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
+            'nama'     => $this->request->getPost('nama'),
+            'email'    => $this->request->getPost('email'),
+            'username' => $this->request->getPost('username'),
         ]);
+
+        if ($this->request->getPost('password')) {
+            $this->user->update($anggota['user_id'], [
+                'password' => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
+            ]);
+        }
+
+        $this->anggota->update($id, [
+            'nis'    => $this->request->getPost('nis'),
+            'alamat' => $this->request->getPost('alamat'),
+            'no_hp'  => $this->request->getPost('no_hp'),
+        ]);
+
+        return redirect()->to('/anggota');
     }
 
-    // ================= UPDATE ANGGOTA =================
-    $this->anggota->update($id, [
-        'nis'    => $this->request->getPost('nis'),
-        'alamat' => $this->request->getPost('alamat'),
-        'no_hp'  => $this->request->getPost('no_hp'),
-    ]);
-
-    return redirect()->to('/anggota');
-}
-
-    // ================= DELETE =================
+    // ================= DELETE (NONAKTIFKAN USER) =================
     public function delete($id)
     {
         $anggota = $this->anggota->find($id);
 
         if ($anggota) {
-            $this->user->delete($anggota['user_id']);
-            $this->anggota->update($id, [
-    'status' => 'nonaktif'
-]);
-
-return redirect()->back()->with('success', 'Anggota dinonaktifkan');
-
-public function aktifkan($id)
-{
-    $this->anggota->update($id, [
-        'status' => 'aktif'
-    ]);
-
-    return redirect()->back()->with('success', 'Anggota berhasil diaktifkan');
-}
+            $this->user->update($anggota['user_id'], [
+                'status' => 'nonaktif'
+            ]);
         }
 
-        return redirect()->to('/anggota');
+        return redirect()->back()->with('success', 'Anggota dinonaktifkan');
     }
-    public function nonaktifkan($id)
-{
-    $this->anggota->update($id, [
-        'status' => 'nonaktif'
-    ]);
 
-    return redirect()->back()->with('success', 'Anggota dinonaktifkan');
+    // ================= AKTIFKAN =================
+    public function aktifkan($id)
+    {
+        $anggota = $this->anggota->find($id);
+
+        $this->user->update($anggota['user_id'], [
+            'status' => 'aktif'
+        ]);
+
+        return redirect()->back()->with('success', 'Anggota diaktifkan');
+    }
+
+    // ================= NONAKTIFKAN =================
+    public function nonaktifkan($id)
+    {
+        $anggota = $this->anggota->find($id);
+
+        $this->user->update($anggota['user_id'], [
+            'status' => 'nonaktif'
+        ]);
+
+        return redirect()->back()->with('success', 'Anggota dinonaktifkan');
+    }
+    public function dashboard()
+{
+    return view('anggota/dashboard');
 }
 }

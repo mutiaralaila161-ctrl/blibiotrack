@@ -1,71 +1,85 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
-<div>
+<div class="container py-4">
 
-    <h2>📦 Data Pengembalian</h2>
+    <div class="d-flex justify-content-between align-items-center mb-3">
 
-    <br>
+        <h4 class="fw-bold mb-0">
+            <i class="bi bi-arrow-return-left"></i> Data Pengembalian
+        </h4>
 
-    <table border="1" cellpadding="5" cellspacing="0">
+    </div>
 
-        <tr>
-            <th>No</th>
-            <th>Nama</th>
-            <th>Tanggal Kembali</th>
-            <th>Denda</th>
-            <th>Status</th>
-        </tr>
+    <div class="card shadow-sm border-0">
 
-        <?php if (!empty($pengembalian)): ?>
+        <div class="card-body table-responsive">
 
-            <?php $no = 1; foreach ($pengembalian as $p): ?>
+            <table class="table table-striped table-hover align-middle">
 
-            <tr>
+                <thead class="table-dark">
+                <tr>
+                    <th>No</th>
+                    <th>Nama Anggota</th>
+                    <th>Tanggal Kembali</th>
+                    <th>Denda</th>
+                </tr>
+                </thead>
 
-                <td><?= $no++ ?></td>
+                <tbody>
 
-                <td><?= esc($p['nama_anggota'] ?? '-') ?></td>
+                <?php if (!empty($pengembalian)): ?>
 
-                <td><?= esc($p['tanggal_dikembalikan'] ?? '-') ?></td>
+                    <?php $no = 1; foreach ($pengembalian as $p): ?>
 
-                <!-- DENDA -->
-                <td>
-                    <?php if (!empty($p['jumlah_denda']) && $p['jumlah_denda'] > 0): ?>
-                        Rp <?= number_format($p['jumlah_denda'],0,',','.') ?>
-                    <?php else: ?>
-                        Tidak ada
-                    <?php endif; ?>
-                </td>
+                        <tr>
 
-                <!-- STATUS DENDA -->
-                <td>
-                    <?php if (!empty($p['status_denda'])): ?>
+                            <td><?= $no++ ?></td>
 
-                        <?php if ($p['status_denda'] == 'belum_bayar'): ?>
-                            Belum Bayar
-                        <?php else: ?>
-                            Lunas
-                        <?php endif; ?>
+                            <td class="fw-semibold">
+                                <?= esc($p['nama_anggota'] ?? '-') ?>
+                            </td>
 
-                    <?php else: ?>
-                        -
-                    <?php endif; ?>
-                </td>
+                            <td>
+                                <span class="text-muted">
+                                    <?= esc($p['tanggal_dikembalikan'] ?? '-') ?>
+                                </span>
+                            </td>
 
-            </tr>
+                            <!-- DENDA -->
+                            <td>
+                                <?php if (!empty($p['jumlah_denda']) && $p['jumlah_denda'] > 0): ?>
+                                    <span class="badge bg-danger">
+                                        Rp <?= number_format($p['jumlah_denda'],0,',','.') ?>
+                                    </span>
+                                <?php else: ?>
+                                    <span class="badge bg-success">
+                                        Tidak ada denda
+                                    </span>
+                                <?php endif; ?>
+                            </td>
 
-            <?php endforeach; ?>
+                        </tr>
 
-        <?php else: ?>
+                    <?php endforeach; ?>
 
-            <tr>
-                <td colspan="5">Belum ada data pengembalian</td>
-            </tr>
+                <?php else: ?>
 
-        <?php endif; ?>
+                    <tr>
+                        <td colspan="4" class="text-center text-muted py-4">
+                            Belum ada data pengembalian
+                        </td>
+                    </tr>
 
-    </table>
+                <?php endif; ?>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
 
 </div>
 

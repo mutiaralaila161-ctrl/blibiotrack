@@ -1,13 +1,13 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
-<div class="container mt-4">
+<div class="container py-4">
 
-    <div class="card shadow">
+    <div class="card shadow-sm border-0">
 
         <!-- HEADER -->
-        <div class="card-header">
-            <h4 class="mb-0">✏️ Edit Kategori</h4>
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">✏️ Edit Kategori</h5>
         </div>
 
         <div class="card-body">
@@ -19,12 +19,18 @@
 
                     <!-- NAMA KATEGORI -->
                     <div class="col-md-6">
-                        <label class="form-label">Nama Kategori</label>
+
+                        <label class="form-label fw-semibold">
+                            Nama Kategori
+                        </label>
+
                         <input type="text"
                                name="nama_kategori"
                                class="form-control"
                                value="<?= esc($kategori['nama_kategori']) ?>"
+                               placeholder="Masukkan nama kategori"
                                required>
+
                     </div>
 
                 </div>
@@ -32,11 +38,11 @@
                 <!-- BUTTON -->
                 <div class="mt-4 d-flex gap-2">
 
-                    <button type="submit" class="btn btn-primary">
-                        Update
+                    <button type="submit" class="btn btn-primary px-4">
+                        💾 Update
                     </button>
 
-                    <a href="<?= base_url('kategori') ?>" class="btn btn-secondary">
+                    <a href="<?= base_url('kategori') ?>" class="btn btn-secondary px-4">
                         Kembali
                     </a>
 

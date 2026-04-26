@@ -1,63 +1,87 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
-<div>
+<div class="container py-4">
 
-    <h2>📦 Data Rak</h2>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="fw-bold mb-0">
+            <i class="bi bi-box-seam"></i> Data Rak
+        </h4>
 
-    <!-- BUTTON TAMBAH -->
-    <a href="<?= base_url('rak/create') ?>">
-        + Tambah Rak
-    </a>
+        <a href="<?= base_url('rak/create') ?>" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Tambah Rak
+        </a>
+    </div>
 
-    <br><br>
+    <div class="card shadow-sm border-0">
 
-    <!-- TABLE -->
-    <table border="1" cellpadding="5" cellspacing="0">
+        <div class="card-body table-responsive">
 
-        <tr>
-            <th>No</th>
-            <th>Nama Rak</th>
-            <th>Lokasi</th>
-            <th>Aksi</th>
-        </tr>
+            <table class="table table-striped table-hover align-middle">
 
-        <?php if (!empty($rak)): ?>
+                <thead class="table-dark">
+                <tr>
+                    <th>No</th>
+                    <th>Nama Rak</th>
+                    <th>Lokasi</th>
+                    <th>Aksi</th>
+                </tr>
+                </thead>
 
-            <?php $no = 1; foreach ($rak as $r): ?>
-            <tr>
+                <tbody>
 
-                <td><?= $no++ ?></td>
-                <td><?= esc($r['nama_rak']) ?></td>
-                <td><?= esc($r['lokasi']) ?></td>
+                <?php if (!empty($rak)): ?>
 
-                <td>
+                    <?php $no = 1; foreach ($rak as $r): ?>
+                        <tr>
 
-                    <a href="<?= base_url('rak/edit/'.$r['id_rak']) ?>">
-                        Edit
-                    </a>
+                            <td><?= $no++ ?></td>
 
-                    |
+                            <td class="fw-semibold">
+                                <?= esc($r['nama_rak']) ?>
+                            </td>
 
-                    <a href="<?= base_url('rak/delete/'.$r['id_rak']) ?>"
-                       onclick="return confirm('Hapus data rak ini?')">
-                        Hapus
-                    </a>
+                            <td>
+                                <span class="badge bg-info text-dark">
+                                    <?= esc($r['lokasi']) ?>
+                                </span>
+                            </td>
 
-                </td>
+                            <td class="text-nowrap">
 
-            </tr>
-            <?php endforeach; ?>
+                                <a href="<?= base_url('rak/edit/'.$r['id_rak']) ?>"
+                                   class="btn btn-sm btn-warning">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
 
-        <?php else: ?>
+                                <a href="<?= base_url('rak/delete/'.$r['id_rak']) ?>"
+                                   class="btn btn-sm btn-danger"
+                                   onclick="return confirm('Hapus data rak ini?')">
+                                    <i class="bi bi-trash"></i>
+                                </a>
 
-            <tr>
-                <td colspan="4">Belum ada data rak</td>
-            </tr>
+                            </td>
 
-        <?php endif; ?>
+                        </tr>
+                    <?php endforeach; ?>
 
-    </table>
+                <?php else: ?>
+
+                    <tr>
+                        <td colspan="4" class="text-center text-muted py-4">
+                            Belum ada data rak
+                        </td>
+                    </tr>
+
+                <?php endif; ?>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
 
 </div>
 

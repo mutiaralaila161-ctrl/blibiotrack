@@ -3,37 +3,35 @@
 
 <div class="container py-4">
 
-    <div class="card shadow border-0">
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="fw-bold mb-0">✏️ Edit Buku</h4>
+        <a href="<?= base_url('buku') ?>" class="btn btn-outline-secondary btn-sm">
+            ← Kembali
+        </a>
+    </div>
 
-        <!-- HEADER -->
-        <div class="card-header bg-light">
-            <h4 class="mb-0">✏️ Edit Buku</h4>
-        </div>
-
+    <!-- CARD FORM -->
+    <div class="card shadow-sm border-0">
         <div class="card-body">
 
             <form method="post"
                   action="<?= base_url('buku/update/' . $buku['id_buku']) ?>"
                   enctype="multipart/form-data">
 
-                <div class="row g-4">
+                <div class="row g-3">
 
                     <!-- JUDUL -->
                     <div class="col-md-6">
                         <label class="form-label">Judul</label>
-                        <input type="text"
-                               name="judul"
-                               class="form-control"
-                               value="<?= esc($buku['judul']) ?>"
-                               required>
+                        <input type="text" name="judul" class="form-control"
+                               value="<?= esc($buku['judul']) ?>" required>
                     </div>
 
                     <!-- ISBN -->
                     <div class="col-md-6">
                         <label class="form-label">ISBN</label>
-                        <input type="text"
-                               name="isbn"
-                               class="form-control"
+                        <input type="text" name="isbn" class="form-control"
                                value="<?= esc($buku['isbn']) ?>">
                     </div>
 
@@ -96,77 +94,64 @@
                     <!-- TAHUN -->
                     <div class="col-md-2">
                         <label class="form-label">Tahun</label>
-                        <input type="number"
-                               name="tahun_terbit"
-                               class="form-control"
+                        <input type="number" name="tahun_terbit" class="form-control"
                                value="<?= esc($buku['tahun_terbit']) ?>">
                     </div>
 
                     <!-- JUMLAH -->
                     <div class="col-md-2">
                         <label class="form-label">Jumlah</label>
-                        <input type="number"
-                               name="jumlah"
-                               class="form-control"
+                        <input type="number" name="jumlah" class="form-control"
                                value="<?= esc($buku['jumlah']) ?>">
                     </div>
 
                     <!-- TERSEDIA -->
                     <div class="col-md-2">
                         <label class="form-label">Tersedia</label>
-                        <input type="number"
-                               name="tersedia"
-                               class="form-control"
+                        <input type="number" name="tersedia" class="form-control"
                                value="<?= esc($buku['tersedia']) ?>">
                     </div>
 
                     <!-- DESKRIPSI -->
-                    <div class="col-md-12">
+                    <div class="col-12">
                         <label class="form-label">Deskripsi</label>
-                        <textarea name="deskripsi"
-                                  class="form-control"
-                                  rows="3"><?= esc($buku['deskripsi']) ?></textarea>
+                        <textarea name="deskripsi" class="form-control" rows="3"><?= esc($buku['deskripsi']) ?></textarea>
                     </div>
 
                     <!-- COVER -->
                     <div class="col-md-6">
-
                         <label class="form-label">Cover Baru</label>
                         <input type="file" name="cover" class="form-control">
 
                         <div class="mt-3">
-                            <small class="text-muted d-block mb-2">Cover saat ini:</small>
+                            <small class="text-muted">Cover saat ini</small><br>
 
                             <?php if (!empty($buku['cover'])): ?>
                                 <img src="<?= base_url('uploads/buku/' . $buku['cover']) ?>"
-                                     class="img-thumbnail"
-                                     style="width:120px;">
+                                     class="img-thumbnail mt-2"
+                                     width="120">
                             <?php else: ?>
                                 <span class="text-muted">Tidak ada cover</span>
                             <?php endif; ?>
                         </div>
-
                     </div>
 
                 </div>
 
                 <!-- BUTTON -->
                 <div class="mt-4 d-flex gap-2">
-
                     <button type="submit" class="btn btn-primary">
-                        Update
+                        💾 Update
                     </button>
 
                     <a href="<?= base_url('buku') ?>" class="btn btn-outline-secondary">
-                        Kembali
+                        Batal
                     </a>
-
                 </div>
 
             </form>
 
         </div>
-
     </div>
 
 </div>

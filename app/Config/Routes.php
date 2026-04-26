@@ -13,8 +13,8 @@ $authFilter = ['filter' => 'auth'];
 $admin     = ['filter' => 'role:admin'];
 $petugas     = ['filter' => 'role:petugas'];
 $anggota     = ['filter' => 'role:anggota'];
-$intRole   = ['filter' => 'role:admin, petugas'];
-$allRole   = ['filter' => 'role:admin, petugas, anggota'];
+$intRole   = ['filter' => 'role:admin,petugas'];
+$allRole   = ['filter' => 'role:admin,petugas,anggota'];
 
 // Login
 $routes->get('/login', 'Auth::login');
@@ -22,8 +22,8 @@ $routes->post('/proses-login', 'Auth::prosesLogin');
 $routes->get('/logout', 'Auth::logout');
 
 // Halaman utama
-$routes->get('/', 'Home::index', $authFilter);
-$routes->get('/dashboard', 'Home::index', $authFilter);
+$routes->get('/', 'Dashboard::index');
+$routes->get('dashboard', 'Dashboard::index');
 
 // User
 $routes->get('/users/create', 'Users::create'); // form tambah user
@@ -40,6 +40,9 @@ $routes->get('users/wa/(:num)', 'Users::wa/$1', $allRole); // aksi kirim ke what
 
 $routes->get('users/aktifkan/(:num)', 'Users::aktifkan/$1');
 $routes->get('users/nonaktifkan/(:num)', 'Users::nonaktifkan/$1');
+
+$routes->post('register', 'Auth::register');
+$routes->get('register', 'Auth::registerForm');
 
 $routes->get('buku', 'Buku::index');
 $routes->get('buku/create', 'Buku::create');
@@ -85,24 +88,43 @@ $routes->group('peminjaman', ['filter' => 'role:admin,petugas,anggota'], functio
     $routes->get('/', 'Peminjaman::index');
     $routes->get('create', 'Peminjaman::create');
     $routes->post('save', 'Peminjaman::save');
+
     $routes->get('detail/(:num)', 'Peminjaman::detail/$1');
-    $routes->get('kembali-all/(:num)', 'Peminjaman::kembaliAll/$1');
+    $routes->get('print', 'Peminjaman::print');
+
     $routes->get('delete/(:num)', 'Peminjaman::delete/$1');
+ 
+    $routes->get('verifikasi-kembali/(:num)', 'Peminjaman::verifikasiKembali/$1');
+    $routes->get('approve/(:num)', 'Peminjaman::approve/$1');
+    $routes->get('reject/(:num)', 'Peminjaman::reject/$1');
+
+    // ✅ FIX DENDA (INI YANG BENAR)
+    $routes->get('bayarDenda/(:num)', 'Peminjaman::bayarDenda/$1');
+    $routes->get('verifikasiDenda/(:num)', 'Peminjaman::verifikasiDenda/$1');
 
 });
 
 // ================= PENGEMBALIAN =================
 $routes->group('pengembalian', function ($routes) {
 
-    // halaman utama pengembalian (FIX ERROR 404)
     $routes->get('/', 'Pengembalian::index');
-
     $routes->get('form/(:num)', 'Pengembalian::form/$1');
     $routes->get('proses/(:num)', 'Pengembalian::proses/$1');
 });
-$routes->get('denda', 'Denda::index');
-$routes->get('denda/detail/(:num)', 'Denda::detail/$1');
-$routes->get('denda/bayar/(:num)', 'Denda::bayar/$1');
+
+
+// ================= DENDA (VIEW SAJA) =================
+$routes->group('denda', function($routes) {
+
+    $routes->get('/', 'Denda::index');
+});
+
+$routes->get('transaksi', 'Transaksi::index');
+$routes->get('transaksi/create/(:num)', 'Transaksi::create/$1');
+$routes->post('transaksi/save', 'Transaksi::save');
+
+$routes->get('transaksi/bayar/(:num)', 'Transaksi::bayar/$1');
+$routes->get('transaksi/verifikasi/(:num)', 'Transaksi::verifikasi/$1');
 
 $routes->get('/backup', 'Backup::index');
 
@@ -110,3 +132,4 @@ $routes->get('/restore', 'Restore::index');
 $routes->post('/restore/auth', 'Restore::auth');
 $routes->get('/restore/form', 'Restore::form');
 $routes->post('/restore/process', 'Restore::process');
+

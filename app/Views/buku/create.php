@@ -6,15 +6,15 @@
     <div class="card shadow border-0">
 
         <!-- HEADER -->
-        <div class="card-header bg-light">
-            <h4 class="mb-0">➕ Tambah Buku</h4>
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">➕ Tambah Buku</h5>
         </div>
 
         <div class="card-body">
 
             <form action="<?= base_url('buku/store') ?>" method="post" enctype="multipart/form-data">
 
-                <div class="row g-4">
+                <div class="row g-3">
 
                     <!-- ISBN -->
                     <div class="col-md-6">
@@ -28,10 +28,10 @@
                         <input type="text" name="judul" class="form-control" required>
                     </div>
 
-                    <!-- ================= KATEGORI ================= -->
+                    <!-- KATEGORI -->
                     <div class="col-md-4">
                         <label class="form-label">Kategori</label>
-                        <select name="id_kategori" class="form-control" required>
+                        <select name="id_kategori" class="form-select" required>
                             <option value="">-- Pilih Kategori --</option>
                             <?php foreach ($kategori as $k): ?>
                                 <option value="<?= $k['id_kategori'] ?>">
@@ -41,10 +41,10 @@
                         </select>
                     </div>
 
-                    <!-- ================= PENULIS ================= -->
+                    <!-- PENULIS -->
                     <div class="col-md-4">
                         <label class="form-label">Penulis</label>
-                        <select name="id_penulis" class="form-control" required>
+                        <select name="id_penulis" class="form-select" required>
                             <option value="">-- Pilih Penulis --</option>
                             <?php foreach ($penulis as $p): ?>
                                 <option value="<?= $p['id_penulis'] ?>">
@@ -54,10 +54,10 @@
                         </select>
                     </div>
 
-                    <!-- ================= PENERBIT ================= -->
+                    <!-- PENERBIT -->
                     <div class="col-md-4">
                         <label class="form-label">Penerbit</label>
-                        <select name="id_penerbit" class="form-control" required>
+                        <select name="id_penerbit" class="form-select" required>
                             <option value="">-- Pilih Penerbit --</option>
                             <?php foreach ($penerbit as $pb): ?>
                                 <option value="<?= $pb['id_penerbit'] ?>">
@@ -69,23 +69,19 @@
 
                     <!-- RAK -->
                     <div class="col-md-6">
-    <label class="form-label">Rak</label>
-
-    <select name="id_rak" class="form-control">
-        <option value="">Pilih Rak</option>
-
-        <?php foreach ($rak as $r): ?>
-            <option value="<?= $r['id_rak'] ?>">
-                <?= esc($r['nama_rak']) ?>
-
-                <?php if (!empty($r['lokasi'])): ?>
-                    - <?= esc($r['lokasi']) ?>
-                <?php endif; ?>
-            </option>
-        <?php endforeach; ?>
-
-    </select>
-</div>
+                        <label class="form-label">Rak</label>
+                        <select name="id_rak" class="form-select">
+                            <option value="">-- Pilih Rak --</option>
+                            <?php foreach ($rak as $r): ?>
+                                <option value="<?= $r['id_rak'] ?>">
+                                    <?= esc($r['nama_rak']) ?>
+                                    <?php if (!empty($r['lokasi'])): ?>
+                                        - <?= esc($r['lokasi']) ?>
+                                    <?php endif; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
                     <!-- TAHUN -->
                     <div class="col-md-3">
@@ -100,7 +96,7 @@
                     </div>
 
                     <!-- DESKRIPSI -->
-                    <div class="col-md-12">
+                    <div class="col-12">
                         <label class="form-label">Deskripsi</label>
                         <textarea name="deskripsi" class="form-control" rows="3"></textarea>
                     </div>
@@ -120,7 +116,7 @@
                         Simpan
                     </button>
 
-                    <a href="<?= base_url('buku') ?>" class="btn btn-secondary">
+                    <a href="<?= base_url('buku') ?>" class="btn btn-outline-secondary">
                         Kembali
                     </a>
 

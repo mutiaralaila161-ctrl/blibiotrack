@@ -1,16 +1,18 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
-<div class="container mt-4">
+<div class="container py-4">
 
-    <div class="card shadow">
+    <div class="card shadow-sm border-0">
 
         <!-- HEADER -->
-        <div class="card-header">
-            <h4 class="mb-0">✏️ Edit User</h4>
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0 fw-semibold">
+                <i class="bi bi-pencil-square"></i> Edit User
+            </h5>
         </div>
 
-        <div class="card-body">
+        <div class="card-body p-4">
 
             <form action="<?= base_url('users/update/' . $user['id']) ?>"
                   method="post"
@@ -20,7 +22,7 @@
 
                     <!-- NAMA -->
                     <div class="col-md-6">
-                        <label class="form-label">Nama Lengkap</label>
+                        <label class="form-label fw-semibold">Nama Lengkap</label>
                         <input type="text"
                                name="nama"
                                class="form-control"
@@ -30,7 +32,7 @@
 
                     <!-- EMAIL -->
                     <div class="col-md-6">
-                        <label class="form-label">Email</label>
+                        <label class="form-label fw-semibold">Email</label>
                         <input type="email"
                                name="email"
                                class="form-control"
@@ -40,7 +42,7 @@
 
                     <!-- USERNAME -->
                     <div class="col-md-6">
-                        <label class="form-label">Username</label>
+                        <label class="form-label fw-semibold">Username</label>
                         <input type="text"
                                name="username"
                                class="form-control"
@@ -50,15 +52,17 @@
 
                     <!-- PASSWORD -->
                     <div class="col-md-6">
-                        <label class="form-label">Password (kosongkan jika tidak diubah)</label>
+                        <label class="form-label fw-semibold">Password</label>
                         <input type="password"
                                name="password"
-                               class="form-control">
+                               class="form-control"
+                               placeholder="Kosongkan jika tidak diubah">
+                        <small class="text-muted">Biarkan kosong jika tidak ingin mengganti password</small>
                     </div>
 
                     <!-- ROLE -->
                     <div class="col-md-6">
-                        <label class="form-label">Role</label>
+                        <label class="form-label fw-semibold">Role</label>
                         <select name="role" class="form-select">
                             <option value="admin" <?= $user['role'] == 'admin' ? 'selected' : '' ?>>Admin</option>
                             <option value="petugas" <?= $user['role'] == 'petugas' ? 'selected' : '' ?>>Petugas</option>
@@ -68,18 +72,22 @@
 
                     <!-- FOTO -->
                     <div class="col-md-6">
-                        <label class="form-label">Foto</label>
+                        <label class="form-label fw-semibold">Foto Profil</label>
                         <input type="file" name="foto" class="form-control">
 
-                        <small class="text-muted d-block mt-2">Foto saat ini:</small>
+                        <div class="mt-3">
+                            <small class="text-muted d-block mb-2">Foto saat ini:</small>
 
-                        <?php if (!empty($user['foto'])): ?>
-                            <img src="<?= base_url('uploads/users/' . $user['foto']) ?>"
-                                 width="80"
-                                 class="rounded mt-1">
-                        <?php else: ?>
-                            <span class="text-muted">Tidak ada foto</span>
-                        <?php endif; ?>
+                            <?php if (!empty($user['foto'])): ?>
+                                <img src="<?= base_url('uploads/users/' . $user['foto']) ?>"
+                                     class="rounded-circle border shadow-sm"
+                                     width="80"
+                                     height="80"
+                                     style="object-fit: cover;">
+                            <?php else: ?>
+                                <span class="text-muted">Tidak ada foto</span>
+                            <?php endif; ?>
+                        </div>
                     </div>
 
                 </div>
@@ -87,12 +95,12 @@
                 <!-- BUTTON -->
                 <div class="mt-4 d-flex gap-2">
 
-                    <button type="submit" class="btn btn-primary">
-                        Update
+                    <button type="submit" class="btn btn-success px-4">
+                        <i class="bi bi-save"></i> Update
                     </button>
 
-                    <a href="<?= base_url('users') ?>" class="btn btn-secondary">
-                        Kembali
+                    <a href="<?= base_url('users') ?>" class="btn btn-secondary px-4">
+                        <i class="bi bi-arrow-left"></i> Kembali
                     </a>
 
                 </div>

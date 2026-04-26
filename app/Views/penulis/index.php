@@ -1,92 +1,132 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
-<div>
+<div class="container py-4">
 
-    <h2>✍️ Data Penulis</h2>
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
 
-    <!-- BUTTON TAMBAH -->
-    <a href="<?= base_url('penulis/create') ?>">
-        + Tambah Penulis
-    </a>
+        <h4 class="fw-bold mb-0">
+            <i class="bi bi-pen"></i> Data Penulis
+        </h4>
 
-    <br><br>
+        <a href="<?= base_url('penulis/create') ?>" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Tambah Penulis
+        </a>
+
+    </div>
 
     <!-- SEARCH -->
-    <form method="get" action="<?= base_url('penulis') ?>">
+    <div class="card shadow-sm border-0 mb-3">
 
-        <input type="text"
-               name="keyword"
-               placeholder="Cari penulis..."
-               value="<?= esc($_GET['keyword'] ?? '') ?>">
+        <div class="card-body">
 
-        <button type="submit">Cari</button>
-        <a href="<?= base_url('penulis') ?>">Reset</a>
+            <form method="get" action="<?= base_url('penulis') ?>" class="row g-2">
 
-    </form>
+                <div class="col-md-10">
+                    <input type="text"
+                           name="keyword"
+                           class="form-control"
+                           placeholder="Cari penulis..."
+                           value="<?= esc($_GET['keyword'] ?? '') ?>">
+                </div>
 
-    <br>
+                <div class="col-md-2 d-grid">
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-search"></i> Cari
+                    </button>
+                </div>
 
-    <!-- FLASH -->
+                <div class="col-12 mt-2">
+                    <a href="<?= base_url('penulis') ?>" class="btn btn-outline-secondary btn-sm">
+                        Reset
+                    </a>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- FLASH MESSAGE -->
     <?php if (session()->getFlashdata('success')): ?>
-        <div>
+        <div class="alert alert-success">
+            <i class="bi bi-check-circle"></i>
             <?= session()->getFlashdata('success') ?>
         </div>
     <?php endif; ?>
 
-    <br>
-
     <!-- TABLE -->
-    <table border="1" cellpadding="5" cellspacing="0">
+    <div class="card shadow-sm border-0">
 
-        <tr>
-            <th>No</th>
-            <th>Nama Penulis</th>
-            <th>Aksi</th>
-        </tr>
+        <div class="card-body table-responsive">
 
-        <?php if (!empty($penulis)): ?>
+            <table class="table table-striped table-hover align-middle">
 
-            <?php $no = 1 + (10 * ($pager->getCurrentPage() - 1)); ?>
+                <thead class="table-dark">
+                <tr>
+                    <th>No</th>
+                    <th>Nama Penulis</th>
+                    <th>Aksi</th>
+                </tr>
+                </thead>
 
-            <?php foreach ($penulis as $p): ?>
-            <tr>
+                <tbody>
 
-                <td><?= $no++ ?></td>
-                <td><?= esc($p['nama_penulis']) ?></td>
+                <?php if (!empty($penulis)): ?>
 
-                <td>
+                    <?php $no = 1 + (10 * ($pager->getCurrentPage() - 1)); ?>
 
-                    <a href="<?= base_url('penulis/edit/' . $p['id_penulis']) ?>">
-                        Edit
-                    </a>
+                    <?php foreach ($penulis as $p): ?>
+                        <tr>
 
-                    |
+                            <td><?= $no++ ?></td>
 
-                    <a href="<?= base_url('penulis/delete/' . $p['id_penulis']) ?>"
-                       onclick="return confirm('Hapus data penulis ini?')">
-                        Hapus
-                    </a>
+                            <td class="fw-semibold">
+                                <?= esc($p['nama_penulis']) ?>
+                            </td>
 
-                </td>
+                            <td class="text-nowrap">
 
-            </tr>
-            <?php endforeach; ?>
+                                <a href="<?= base_url('penulis/edit/' . $p['id_penulis']) ?>"
+                                   class="btn btn-sm btn-warning">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
 
-        <?php else: ?>
+                                <a href="<?= base_url('penulis/delete/' . $p['id_penulis']) ?>"
+                                   class="btn btn-sm btn-danger"
+                                   onclick="return confirm('Hapus data penulis ini?')">
+                                    <i class="bi bi-trash"></i>
+                                </a>
 
-            <tr>
-                <td colspan="3">Belum ada data penulis</td>
-            </tr>
+                            </td>
 
-        <?php endif; ?>
+                        </tr>
+                    <?php endforeach; ?>
 
-    </table>
+                <?php else: ?>
 
-    <br>
+                    <tr>
+                        <td colspan="3" class="text-center text-muted py-4">
+                            Belum ada data penulis
+                        </td>
+                    </tr>
+
+                <?php endif; ?>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
 
     <!-- PAGINATION -->
-    <?= $pager->links() ?>
+    <div class="mt-3">
+        <?= $pager->links() ?>
+    </div>
 
 </div>
 

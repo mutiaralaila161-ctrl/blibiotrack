@@ -1,117 +1,132 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
-<div class="container mt-4">
+<div class="container py-4">
 
-    <h2>📦 Form Pengembalian Buku</h2>
+    <h4 class="fw-bold mb-3">
+        <i class="bi bi-arrow-return-left"></i> Form Pengembalian Buku
+    </h4>
 
     <!-- ================= INFO PEMINJAMAN ================= -->
-    <div class="card mt-3">
-        <div class="card-header">
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-primary text-white">
             <strong>📌 Informasi Peminjaman</strong>
         </div>
 
-        <div class="card-body">
-            <table class="table table-bordered">
+        <div class="card-body table-responsive">
+
+            <table class="table table-borderless mb-0">
 
                 <tr>
-                    <th>ID Peminjaman</th>
+                    <th width="200">ID Peminjaman</th>
                     <td><?= $peminjaman['id_peminjaman'] ?? '-' ?></td>
                 </tr>
 
                 <tr>
                     <th>Nama Anggota</th>
-                    <td><?= $peminjaman['nama_anggota'] ?? '-' ?></td>
+                    <td><?= esc($peminjaman['nama_anggota'] ?? '-') ?></td>
                 </tr>
 
                 <tr>
                     <th>Nama Petugas</th>
-                    <td><?= $peminjaman['nama_petugas'] ?? '-' ?></td>
+                    <td><?= esc($peminjaman['nama_petugas'] ?? '-') ?></td>
                 </tr>
 
                 <tr>
                     <th>Tanggal Pinjam</th>
-                    <td><?= $peminjaman['tanggal_pinjam'] ?? '-' ?></td>
+                    <td><?= esc($peminjaman['tanggal_pinjam'] ?? '-') ?></td>
                 </tr>
 
                 <tr>
                     <th>Status</th>
                     <td>
                         <?php if (($peminjaman['status'] ?? '') == 'kembali'): ?>
-                            <span class="text-success">✔ Sudah Dikembalikan</span>
+                            <span class="badge bg-success">✔ Sudah Dikembalikan</span>
                         <?php else: ?>
-                            <span class="text-danger">📌 Masih Dipinjam</span>
+                            <span class="badge bg-danger">📌 Masih Dipinjam</span>
                         <?php endif; ?>
                     </td>
                 </tr>
 
             </table>
+
         </div>
+
     </div>
 
     <!-- ================= LIST BUKU ================= -->
-    <div class="card mt-4">
-        <div class="card-header">
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-dark text-white">
             <strong>📚 Buku yang Dipinjam</strong>
         </div>
 
-        <div class="card-body">
+        <div class="card-body table-responsive">
 
-            <table class="table table-bordered">
-                <thead>
+            <table class="table table-striped table-hover align-middle">
+
+                <thead class="table-dark">
                     <tr>
                         <th>No</th>
                         <th>Cover</th>
                         <th>Judul Buku</th>
                         <th>Jumlah</th>
-                        <th>Status</th>
                     </tr>
                 </thead>
 
                 <tbody>
 
                 <?php if (!empty($detail)): ?>
+
                     <?php $no = 1; foreach ($detail as $d): ?>
                         <tr>
+
                             <td><?= $no++ ?></td>
 
                             <td>
                                 <?php if (!empty($d['cover'])): ?>
                                     <img src="<?= base_url('uploads/buku/' . $d['cover']) ?>"
-                                         width="60">
+                                         width="60"
+                                         class="rounded shadow-sm">
                                 <?php else: ?>
-                                    -
+                                    <span class="text-muted">-</span>
                                 <?php endif; ?>
                             </td>
 
-                            <td><?= esc($d['judul']) ?></td>
-
-                            <td><?= esc($d['jumlah']) ?></td>
+                            <td class="fw-semibold">
+                                <?= esc($d['judul']) ?>
+                            </td>
 
                             <td>
-                                <?php if (($d['status_kembali'] ?? '') == 'kembali'): ?>
-                                    <span class="text-success">✔ Kembali</span>
-                                <?php else: ?>
-                                    <span class="text-warning">📌 Dipinjam</span>
-                                <?php endif; ?>
+                                <span class="badge bg-info text-dark">
+                                    <?= esc($d['jumlah']) ?>
+                                </span>
                             </td>
 
                         </tr>
                     <?php endforeach; ?>
+
                 <?php else: ?>
+
                     <tr>
-                        <td colspan="5" class="text-center">Tidak ada data buku</td>
+                        <td colspan="4" class="text-center text-muted py-4">
+                            Tidak ada data buku
+                        </td>
                     </tr>
+
                 <?php endif; ?>
 
                 </tbody>
+
             </table>
 
         </div>
+
     </div>
 
     <!-- ================= BUTTON ================= -->
-    <div class="mt-4">
+    <div class="d-flex gap-2">
 
         <?php if (($peminjaman['status'] ?? '') != 'kembali'): ?>
             <a href="<?= base_url('pengembalian/proses/' . $peminjaman['id_peminjaman']) ?>"

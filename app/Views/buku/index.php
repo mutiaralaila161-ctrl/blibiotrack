@@ -1,116 +1,128 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
-<div>
+<div class="container py-4">
 
-    <h2>📚 Data Buku</h2>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="mb-0">📚 Data Buku</h4>
 
-    <a href="<?= base_url('buku/create') ?>">
-        + Tambah Buku
-    </a>
-
-    <br><br>
-
-    <!-- ================= SEARCH ================= -->
-    <form method="get" action="<?= base_url('buku') ?>">
-
-        <input type="text"
-               name="keyword"
-               placeholder="Cari judul buku..."
-               value="<?= esc($keyword ?? '') ?>">
-
-        <button type="submit">Cari</button>
-
-        <a href="<?= base_url('buku') ?>">Reset</a>
-
-        <a href="<?= base_url('buku/print?' . http_build_query($_GET)) ?>" target="_blank">
-            Print
+        <a href="<?= base_url('buku/create') ?>" class="btn btn-primary btn-sm">
+            + Tambah Buku
         </a>
+    </div>
 
-    </form>
+    <!-- SEARCH -->
+    <div class="card mb-3 shadow-sm">
+        <div class="card-body">
+            <form class="row g-2" method="get">
 
-    <br>
+                <div class="col-md-8">
+                    <input type="text"
+                           name="keyword"
+                           class="form-control"
+                           placeholder="Cari judul buku..."
+                           value="<?= esc($keyword ?? '') ?>">
+                </div>
 
-    <!-- ================= FLASH ================= -->
-    <?php if (session()->getFlashdata('success')): ?>
-        <p style="color:green;">
-            <?= session()->getFlashdata('success') ?>
-        </p>
-    <?php endif; ?>
+                <div class="col-md-4 d-flex gap-2">
+                    <button class="btn btn-primary w-100">Cari</button>
+                    <a href="<?= base_url('buku') ?>" class="btn btn-secondary w-100">Reset</a>
+                </div>
 
-    <!-- ================= TABLE ================= -->
-    <table border="1" cellpadding="6" cellspacing="0">
+            </form>
+        </div>
+    </div>
 
-        <tr>
-            <th>No</th>
-            <th>Cover</th>
-            <th>ISBN</th>
-            <th>Judul</th>
-            <th>Kategori</th>
-            <th>Penulis</th>
-            <th>Penerbit</th>
-            <th>Tahun</th>
-            <th>Rak</th>
-            <th>Jumlah</th>
-            <th>Tersedia</th>
-            <th>Aksi</th>
-        </tr>
+    <!-- TABLE -->
+    <div class="card shadow-sm">
+        <div class="table-responsive">
 
-        <?php if (!empty($buku)): ?>
-            <?php $no = 1; foreach ($buku as $b): ?>
+            <table class="table table-hover align-middle mb-0">
+
+                <thead class="table-dark">
                 <tr>
-
-                    <td><?= $no++ ?></td>
-
-                    <!-- COVER -->
-                    <td>
-                        <?php if (!empty($b['cover'])): ?>
-                            <img src="<?= base_url('uploads/buku/' . $b['cover']) ?>"
-                                 width="50">
-                        <?php else: ?>
-                            -
-                        <?php endif; ?>
-                    </td>
-
-                    <td><?= esc($b['isbn'] ?? '-') ?></td>
-                    <td><?= esc($b['judul'] ?? '-') ?></td>
-                    <td><?= esc($b['nama_kategori'] ?? '-') ?></td>
-                    <td><?= esc($b['nama_penulis'] ?? '-') ?></td>
-                    <td><?= esc($b['nama_penerbit'] ?? '-') ?></td>
-                    <td><?= esc($b['tahun_terbit'] ?? '-') ?></td>
-                    <td><?= esc($b['nama_rak'] ?? '-') ?></td>
-                    <td><?= esc($b['jumlah'] ?? 0) ?></td>
-                    <td><?= esc($b['tersedia'] ?? 0) ?></td>
-
-                    <!-- AKSI -->
-                    <td>
-
-                        <a href="<?= base_url('buku/detail/' . $b['id_buku']) ?>">Detail</a> |
-                        <a href="<?= base_url('buku/edit/' . $b['id_buku']) ?>">Edit</a> |
-                        <a href="<?= base_url('buku/wa/' . $b['id_buku']) ?>" target="_blank">WA</a> |
-                        <a href="<?= base_url('buku/delete/' . $b['id_buku']) ?>"
-                           onclick="return confirm('Hapus buku ini?')">
-                            Hapus
-                        </a>
-
-                    </td>
-
+                    <th>No</th>
+                    <th>Cover</th>
+                    <th>Judul</th>
+                    <th>Kategori</th>
+                    <th>Penulis</th>
+                    <th>Stok</th>
+                    <th>Aksi</th>
                 </tr>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <tr>
-                <td colspan="12">Belum ada data buku</td>
-            </tr>
-        <?php endif; ?>
+                </thead>
 
-    </table>
+                <tbody>
 
-    <!-- ================= PAGINATION ================= -->
-    <br>
+                <?php if (!empty($buku)): ?>
+                    <?php $no = 1; foreach ($buku as $b): ?>
+                        <tr>
 
-    <?php if (!empty($pager)) : ?>
+                            <td><?= $no++ ?></td>
+
+                            <td>
+                                <img src="<?= base_url('uploads/buku/' . ($b['cover'] ?? 'default.png')) ?>"
+                                     width="50" class="rounded">
+                            </td>
+
+                            <td class="fw-semibold">
+                                <?= esc($b['judul'] ?? '-') ?>
+                            </td>
+
+                            <td>
+                                <?= esc($b['nama_kategori'] ?? '-') ?>
+                            </td>
+
+                            <td>
+                                <?= esc($b['nama_penulis'] ?? '-') ?>
+                            </td>
+
+                            <td>
+                                <span class="badge bg-success">
+                                    <?= esc($b['tersedia'] ?? 0) ?>
+                                </span>
+                            </td>
+
+                            <td class="d-flex gap-1">
+
+                                <a href="<?= base_url('buku/detail/'.$b['id_buku']) ?>"
+                                   class="btn btn-sm btn-info">
+                                    Detail
+                                </a>
+
+                                <a href="<?= base_url('buku/edit/'.$b['id_buku']) ?>"
+                                   class="btn btn-sm btn-warning">
+                                    Edit
+                                </a>
+
+                                <a href="<?= base_url('buku/delete/'.$b['id_buku']) ?>"
+                                   class="btn btn-sm btn-danger"
+                                   onclick="return confirm('Hapus data?')">
+                                    Hapus
+                                </a>
+
+                            </td>
+
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="7" class="text-center text-muted">
+                            Tidak ada data
+                        </td>
+                    </tr>
+                <?php endif; ?>
+
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+
+    <!-- PAGINATION -->
+    <div class="mt-3">
         <?= $pager->links() ?>
-    <?php endif; ?>
+    </div>
 
 </div>
 
