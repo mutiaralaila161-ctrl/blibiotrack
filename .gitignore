@@ -2,4 +2,9 @@
 /vendor/
 /node_modules/
 
-writable/*
+writable/cache/*
+writable/logs/*
+writable/session/*
+writable/debugbar/*
+writable/backup/*
+writable/uploads/*
