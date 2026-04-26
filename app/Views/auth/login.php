@@ -155,8 +155,12 @@
             <div class="text-center mt-3">
                 <a href="<?= base_url('users/create') ?>" class="btn btn-outline-success btn-sm w-100">
                     <i class="bi bi-person-plus"></i> Daftar Akun Baru
+                     <a href="<?= base_url('restore') ?>" class="menu-link text-light">
+            <i class="bi bi-database me-2"></i> Restore DB
+        </a>
                 </a>
             </div>
+
 
         </div>
 

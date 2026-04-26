@@ -166,10 +166,6 @@ $role = session()->get('role');
             <i class="bi bi-cloud-download me-2"></i> Backup DB
         </a>
 
-        <a href="<?= base_url('restore') ?>" class="menu-link text-light">
-            <i class="bi bi-database me-2"></i> Restore DB
-        </a>
-
     <?php endif; ?>
 
     <!-- SETTING -->
