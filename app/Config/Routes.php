@@ -11,38 +11,40 @@ $authFilter = ['filter' => 'auth'];
 
 // Variabel Role
 $admin     = ['filter' => 'role:admin'];
-$petugas     = ['filter' => 'role:petugas'];
-$anggota     = ['filter' => 'role:anggota'];
+$petugas   = ['filter' => 'role:petugas'];
+$anggota   = ['filter' => 'role:anggota'];
 $intRole   = ['filter' => 'role:admin,petugas'];
 $allRole   = ['filter' => 'role:admin,petugas,anggota'];
 
-// Login
-$routes->get('/login', 'Auth::login');
-$routes->post('/proses-login', 'Auth::prosesLogin');
-$routes->get('/logout', 'Auth::logout');
 
-// Halaman utama
-$routes->get('/', 'Dashboard::index');
-$routes->get('dashboard', 'Dashboard::index');
+// ================= LOGIN =================
+$routes->get('login', 'Auth::login');
+$routes->post('login', 'Auth::prosesLogin');
+$routes->get('logout', 'Auth::logout');
 
-// User
-$routes->get('/users/create', 'Users::create'); // form tambah user
-$routes->post('/users/store', 'Users::store'); // aksi simpan user
+// ================= HALAMAN UTAMA (WAJIB LOGIN) =================
+$routes->get('/', 'Dashboard::index', $authFilter);
+$routes->get('dashboard', 'Dashboard::index', $authFilter);
 
-$routes->get('/users', 'Users::index', $intRole); // menampilkan data user hanya untuk admin & petugas
-$routes->get('/users/edit/(:num)', 'Users::edit/$1', $allRole); // form edit user
-$routes->post('/users/update/(:num)', 'Users::update/$1', $allRole); // aksi update user
-$routes->get('/users/delete/(:num)', 'Users::delete/$1', $allRole); // aksi hapus user
 
-$routes->get('users/detail/(:num)', 'Users::detail/$1', $allRole); // aksi detail user
-$routes->get('users/print', 'Users::print', $allRole); // aksi print data user
-$routes->get('users/wa/(:num)', 'Users::wa/$1', $allRole); // aksi kirim ke whatsapp
+// ================= USER =================
+$routes->get('/users/create', 'Users::create'); 
+$routes->post('/users/store', 'Users::store'); 
+
+$routes->get('/users', 'Users::index', $intRole);
+$routes->get('/users/edit/(:num)', 'Users::edit/$1', $allRole);
+$routes->post('/users/update/(:num)', 'Users::update/$1', $allRole);
+$routes->get('/users/delete/(:num)', 'Users::delete/$1', $allRole);
+
+$routes->get('users/detail/(:num)', 'Users::detail/$1', $allRole);
+$routes->get('users/print', 'Users::print', $allRole);
+$routes->get('users/wa/(:num)', 'Users::wa/$1', $allRole);
 
 $routes->get('users/aktifkan/(:num)', 'Users::aktifkan/$1');
 $routes->get('users/nonaktifkan/(:num)', 'Users::nonaktifkan/$1');
 
-$routes->post('register', 'Auth::register');
 $routes->get('register', 'Auth::registerForm');
+$routes->post('register', 'Auth::register');
 
 $routes->get('buku', 'Buku::index');
 $routes->get('buku/create', 'Buku::create');

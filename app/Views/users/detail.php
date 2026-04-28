@@ -1,85 +1,168 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
-<div class="container py-4">
+<?php
+// FIX ID AMAN (ANTI ERROR)
+$id = $user['id'] ?? $user['id_user'] ?? null;
+?>
 
-    <div class="row justify-content-center">
+<style>
+/* CARD WRAPPER */
+.detail-card {
+    background: #fff;
+    padding: 25px;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
 
-        <div class="col-md-8">
+/* TITLE */
+h3 {
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #343a40;
+}
 
-            <div class="card shadow-sm border-0">
+/* TABLE MODERN */
+.detail-table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+    border-radius: 12px;
+}
 
-                <!-- HEADER -->
-                <div class="card-header bg-dark text-white">
-                    <h5 class="mb-0">
-                        <i class="bi bi-person-badge"></i> Detail User
-                    </h5>
-                </div>
+/* ROW */
+.detail-table tr {
+    border-bottom: 1px solid #f1f1f1;
+    transition: 0.2s;
+}
 
-                <div class="card-body text-center">
+.detail-table tr:hover {
+    background: #f8faff;
+}
 
-                    <!-- FOTO -->
-                    <div class="mb-3">
-                        <?php if (!empty($user['foto'])): ?>
-                            <img src="<?= base_url('uploads/users/' . $user['foto']) ?>"
-                                 class="rounded-circle border shadow"
-                                 width="120"
-                                 height="120"
-                                 style="object-fit: cover;">
-                        <?php else: ?>
-                            <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto"
-                                 style="width:120px;height:120px;">
-                                <i class="bi bi-person fs-1"></i>
-                            </div>
-                        <?php endif; ?>
-                    </div>
+/* LABEL */
+.detail-table td:first-child {
+    width: 200px;
+    font-weight: 600;
+    background: #f8f9fa;
+    color: #495057;
+}
 
-                    <h5 class="fw-bold mb-1"><?= esc($user['nama']) ?></h5>
-                    <p class="text-muted mb-3"><?= esc($user['email']) ?></p>
+/* CELL */
+.detail-table td {
+    padding: 12px 14px;
+    font-size: 14px;
+}
 
-                    <!-- ROLE BADGE -->
-                    <span class="badge bg-primary mb-3">
-                        <?= ucfirst($user['role']) ?>
-                    </span>
+/* FOTO */
+.detail-table img {
+    border-radius: 14px;
+    border: 2px solid #e9ecef;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
 
-                    <!-- DETAIL INFO -->
-                    <div class="list-group text-start mt-3">
+/* BUTTON */
+.btn-soft {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 9px 14px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: 0.2s;
+}
 
-                        <div class="list-group-item d-flex justify-content-between">
-                            <span>Username</span>
-                            <strong><?= esc($user['username']) ?></strong>
-                        </div>
+/* BACK */
+.btn-back {
+    background: #6c757d;
+    color: #fff !important;
+}
+.btn-back:hover {
+    background: #5c636a;
+}
 
-                        <div class="list-group-item d-flex justify-content-between">
-                            <span>Password</span>
-                            <span class="text-muted">••••••••</span>
-                        </div>
+/* EDIT */
+.btn-edit {
+    background: #4f8dfd;
+    color: #fff !important;
+}
+.btn-edit:hover {
+    background: #3b7de7;
+}
 
-                        <div class="list-group-item d-flex justify-content-between">
-                            <span>Role</span>
-                            <span><?= ucfirst($user['role']) ?></span>
-                        </div>
+/* BUTTON GROUP */
+.button-group {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+</style>
 
-                    </div>
+<div class="container py-4" style="max-width: 900px;">
 
-                    <!-- BUTTON -->
-                    <div class="mt-4 d-flex justify-content-between">
+    <div class="detail-card">
 
-                        <a href="<?= base_url('users') ?>" class="btn btn-secondary">
-                            <i class="bi bi-arrow-left"></i> Kembali
-                        </a>
+        <h3>
+            <i class="bi bi-person-lines-fill me-1"></i>
+            Detail User
+        </h3>
 
-                        <?php if (session()->get('role') == 'admin') : ?>
-                            <a href="<?= base_url('users/edit/' . $user['id']) ?>" class="btn btn-warning">
-                                <i class="bi bi-pencil-square"></i> Edit
-                            </a>
-                        <?php endif; ?>
+        <table class="detail-table">
 
-                    </div>
+            <tr>
+                <td>Nama</td>
+                <td><?= esc($user['nama']) ?></td>
+            </tr>
 
-                </div>
+            <tr>
+                <td>Email</td>
+                <td><?= esc($user['email']) ?></td>
+            </tr>
 
-            </div>
+            <tr>
+                <td>Username</td>
+                <td><?= esc($user['username']) ?></td>
+            </tr>
+
+            <tr>
+                <td>Password</td>
+                <td>***</td>
+            </tr>
+
+            <tr>
+                <td>Role</td>
+                <td><?= ucfirst($user['role']) ?></td>
+            </tr>
+
+            <tr>
+                <td>Foto</td>
+                <td>
+                    <?php if (!empty($user['foto'])): ?>
+                        <img src="<?= base_url('uploads/users/' . $user['foto']) ?>"
+                             width="90"
+                             height="90"
+                             style="object-fit: cover;">
+                    <?php else: ?>
+                        <span class="text-muted">Tidak ada foto</span>
+                    <?php endif; ?>
+                </td>
+            </tr>
+
+        </table>
+
+        <!-- BUTTON -->
+        <div class="button-group">
+
+            <a href="<?= base_url('users') ?>" class="btn-soft btn-back">
+                <i class="bi bi-arrow-left"></i> Kembali
+            </a>
+
+            <?php if (session()->get('role') == 'admin') : ?>
+                <a href="<?= base_url('users/edit/' . $id) ?>" class="btn-soft btn-edit">
+                    <i class="bi bi-pencil"></i> Edit
+                </a>
+            <?php endif; ?>
 
         </div>
 

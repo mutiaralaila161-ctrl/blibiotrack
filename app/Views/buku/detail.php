@@ -3,84 +3,100 @@
 
 <div class="container py-4">
 
-    <div class="card shadow border-0">
+    <div class="card shadow border-0 rounded-4 overflow-hidden">
 
-        <div class="card-header bg-primary text-white">
-            <h5 class="mb-0"><?= $title ?? 'Detail Buku' ?></h5>
+        <!-- HEADER -->
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">📘 <?= esc($buku['judul'] ?? 'Detail Buku') ?></h5>
+            <a href="<?= base_url('buku') ?>" class="btn btn-light btn-sm">
+                ← Kembali
+            </a>
         </div>
 
         <div class="card-body">
 
-            <table class="table table-bordered">
+            <div class="row">
 
-                <tr>
-                    <th>Judul Buku</th>
-                    <td><?= $buku['judul'] ?? '-' ?></td>
-                </tr>
+                <!-- COVER -->
+                <div class="col-md-4 text-center mb-3">
+                    <img src="<?= base_url('uploads/buku/' . ($buku['cover'] ?? 'default.png')) ?>"
+                         class="img-fluid rounded shadow-sm"
+                         style="max-height:300px; object-fit:cover;">
+                </div>
 
-                <tr>
-                    <th>ISBN</th>
-                    <td><?= $buku['isbn'] ?? '-' ?></td>
-                </tr>
+                <!-- DETAIL -->
+                <div class="col-md-8">
 
-                <tr>
-                    <th>Kategori</th>
-                    <td><?= $buku['nama_kategori'] ?? '-' ?></td>
-                </tr>
+                    <div class="row g-3">
 
-                <tr>
-                    <th>Penulis</th>
-                    <td><?= $buku['nama_penulis'] ?? '-' ?></td>
-                </tr>
+                        <div class="col-md-6">
+                            <div class="p-3 border rounded bg-light h-100">
+                                <small class="text-muted">ISBN</small>
+                                <div class="fw-semibold"><?= esc($buku['isbn'] ?? '-') ?></div>
+                            </div>
+                        </div>
 
-                <tr>
-                    <th>Penerbit</th>
-                    <td><?= $buku['nama_penerbit'] ?? '-' ?></td>
-                </tr>
+                        <div class="col-md-6">
+                            <div class="p-3 border rounded bg-light h-100">
+                                <small class="text-muted">Kategori</small>
+                                <div class="fw-semibold"><?= esc($buku['nama_kategori'] ?? '-') ?></div>
+                            </div>
+                        </div>
 
-                <tr>
-                    <th>Tahun Terbit</th>
-                    <td><?= $buku['tahun_terbit'] ?? '-' ?></td>
-                </tr>
+                        <div class="col-md-6">
+                            <div class="p-3 border rounded bg-light h-100">
+                                <small class="text-muted">Penulis</small>
+                                <div class="fw-semibold"><?= esc($buku['nama_penulis'] ?? '-') ?></div>
+                            </div>
+                        </div>
 
-                <tr>
-                    <th>Jumlah</th>
-                    <td><?= $buku['jumlah'] ?? '-' ?></td>
-                </tr>
+                        <div class="col-md-6">
+                            <div class="p-3 border rounded bg-light h-100">
+                                <small class="text-muted">Penerbit</small>
+                                <div class="fw-semibold"><?= esc($buku['nama_penerbit'] ?? '-') ?></div>
+                            </div>
+                        </div>
 
-                <tr>
-                    <th>Tersedia</th>
-                    <td><?= $buku['tersedia'] ?? '-' ?></td>
-                </tr>
+                        <div class="col-md-4">
+                            <div class="p-3 border rounded bg-light text-center">
+                                <small class="text-muted">Tahun</small>
+                                <div class="fw-bold"><?= esc($buku['tahun_terbit'] ?? '-') ?></div>
+                            </div>
+                        </div>
 
-                <tr>
-                    <th>Rak</th>
-                    <td><?= $buku['nama_rak'] ?? '-' ?></td>
-                </tr>
+                        <div class="col-md-4">
+                            <div class="p-3 border rounded bg-success text-white text-center">
+                                <small>Stok</small>
+                                <div class="fw-bold fs-5"><?= esc($buku['jumlah'] ?? 0) ?></div>
+                            </div>
+                        </div>
 
-                <tr>
-                    <th>Deskripsi</th>
-                    <td><?= $buku['deskripsi'] ?? '-' ?></td>
-                </tr>
+                        <div class="col-md-4">
+                            <div class="p-3 border rounded bg-info text-white text-center">
+                                <small>Tersedia</small>
+                                <div class="fw-bold fs-5"><?= esc($buku['tersedia'] ?? 0) ?></div>
+                            </div>
+                        </div>
 
-                <tr>
-                    <th>Cover</th>
-                    <td>
-                        <?php if (!empty($buku['cover'])) : ?>
-                            <img src="<?= base_url('uploads/buku/' . $buku['cover']) ?>" 
-                                 width="120" 
-                                 class="img-thumbnail">
-                        <?php else : ?>
-                            -
-                        <?php endif; ?>
-                    </td>
-                </tr>
+                        <div class="col-md-12">
+                            <div class="p-3 border rounded bg-light">
+                                <small class="text-muted">Rak</small>
+                                <div class="fw-semibold"><?= esc($buku['nama_rak'] ?? '-') ?></div>
+                            </div>
+                        </div>
 
-            </table>
+                    </div>
 
-            <a href="<?= base_url('buku') ?>" class="btn btn-secondary">
-                Kembali
-            </a>
+                </div>
+            </div>
+
+            <!-- DESKRIPSI -->
+            <div class="mt-4">
+                <div class="p-3 border rounded bg-light">
+                    <small class="text-muted">Deskripsi</small>
+                    <p class="mb-0 mt-2"><?= esc($buku['deskripsi'] ?? '-') ?></p>
+                </div>
+            </div>
 
         </div>
 

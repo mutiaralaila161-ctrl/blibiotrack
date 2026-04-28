@@ -1,12 +1,78 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
-<div class="container py-4">
+<?php
+// FIX ERROR ID (PALING AMAN)
+$id = $user['id'] ?? $user['id_user'] ?? null;
+?>
 
-    <div class="card shadow-sm border-0">
+<style>
+/* CARD STYLE */
+.card {
+    border: none;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+/* HEADER */
+.card-header {
+    background: linear-gradient(135deg, #4f8dfd, #6ea8fe);
+    border: none;
+    padding: 18px 22px;
+    color: white;
+}
+
+/* FORM LABEL */
+.form-label {
+    font-weight: 600;
+    color: #495057;
+}
+
+/* INPUT */
+.form-control,
+.form-select {
+    border-radius: 12px;
+    padding: 10px 12px;
+    border: 1px solid #e5e5e5;
+    transition: 0.2s;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #4f8dfd;
+    box-shadow: 0 0 0 4px rgba(79,141,253,0.15);
+}
+
+/* BUTTON */
+.btn {
+    border-radius: 12px;
+    padding: 10px 18px;
+}
+
+.btn-success {
+    background: #20c997;
+    border: none;
+}
+
+.btn-success:hover {
+    background: #1aa179;
+}
+
+/* IMAGE */
+img {
+    border-radius: 50%;
+    border: 3px solid #e9ecef;
+    object-fit: cover;
+}
+</style>
+
+<div class="container py-4" style="max-width: 900px;">
+
+    <div class="card">
 
         <!-- HEADER -->
-        <div class="card-header bg-primary text-white">
+        <div class="card-header">
             <h5 class="mb-0 fw-semibold">
                 <i class="bi bi-pencil-square"></i> Edit User
             </h5>
@@ -14,7 +80,7 @@
 
         <div class="card-body p-4">
 
-            <form action="<?= base_url('users/update/' . $user['id']) ?>"
+            <form action="<?= base_url('users/update/' . $id) ?>"
                   method="post"
                   enctype="multipart/form-data">
 
@@ -22,7 +88,7 @@
 
                     <!-- NAMA -->
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold">Nama Lengkap</label>
+                        <label class="form-label">Nama Lengkap</label>
                         <input type="text"
                                name="nama"
                                class="form-control"
@@ -32,7 +98,7 @@
 
                     <!-- EMAIL -->
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold">Email</label>
+                        <label class="form-label">Email</label>
                         <input type="email"
                                name="email"
                                class="form-control"
@@ -42,7 +108,7 @@
 
                     <!-- USERNAME -->
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold">Username</label>
+                        <label class="form-label">Username</label>
                         <input type="text"
                                name="username"
                                class="form-control"
@@ -52,7 +118,7 @@
 
                     <!-- PASSWORD -->
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold">Password</label>
+                        <label class="form-label">Password</label>
                         <input type="password"
                                name="password"
                                class="form-control"
@@ -62,7 +128,7 @@
 
                     <!-- ROLE -->
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold">Role</label>
+                        <label class="form-label">Role</label>
                         <select name="role" class="form-select">
                             <option value="admin" <?= $user['role'] == 'admin' ? 'selected' : '' ?>>Admin</option>
                             <option value="petugas" <?= $user['role'] == 'petugas' ? 'selected' : '' ?>>Petugas</option>
@@ -72,7 +138,7 @@
 
                     <!-- FOTO -->
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold">Foto Profil</label>
+                        <label class="form-label">Foto Profil</label>
                         <input type="file" name="foto" class="form-control">
 
                         <div class="mt-3">
@@ -80,10 +146,8 @@
 
                             <?php if (!empty($user['foto'])): ?>
                                 <img src="<?= base_url('uploads/users/' . $user['foto']) ?>"
-                                     class="rounded-circle border shadow-sm"
                                      width="80"
-                                     height="80"
-                                     style="object-fit: cover;">
+                                     height="80">
                             <?php else: ?>
                                 <span class="text-muted">Tidak ada foto</span>
                             <?php endif; ?>

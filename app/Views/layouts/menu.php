@@ -10,9 +10,10 @@ $role = session()->get('role');
 ?>
 
 <style>
+/* === SIDEBAR CONTAINER === */
 .sidebar-custom {
     width: 260px;
-    background: linear-gradient(180deg, #0d6efd, #0b5ed7);
+    background: linear-gradient(180deg, #4f8dfd, #3b7de7);
     position: fixed;
     top: 0;
     left: 0;
@@ -20,70 +21,105 @@ $role = session()->get('role');
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    transition: 0.3s;
-    padding: 15px;
+    padding: 18px 14px;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.08);
 }
 
+/* === BRAND === */
 .sidebar-custom a.brand {
     font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 15px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #ffffff;
+    letter-spacing: 0.5px;
 }
 
+/* === SECTION TITLE === */
 .menu-section {
     font-size: 11px;
-    letter-spacing: 1px;
-    opacity: 0.7;
-    margin-top: 10px;
+    letter-spacing: 1.5px;
+    margin-top: 18px;
+    margin-bottom: 5px;
     padding-left: 10px;
-    color: #fff;
+    color: rgba(255,255,255,0.75);
 }
 
+/* === MENU LINK === */
 .menu-link {
     display: flex;
     align-items: center;
     padding: 10px 12px;
-    border-radius: 8px;
-    margin: 3px 0;
+    border-radius: 12px;
+    margin: 4px 0;
     color: rgba(255,255,255,0.85);
     text-decoration: none;
-    transition: 0.2s;
     font-size: 14px;
+    transition: all 0.25s ease;
 }
 
+/* ICON */
+.menu-link i {
+    font-size: 16px;
+}
+
+/* HOVER (SOFT EFFECT) */
 .menu-link:hover {
-    background: rgba(255,255,255,0.15);
-    color: #fff;
+    background: rgba(255,255,255,0.12);
+    color: #ffffff;
+    transform: translateX(4px);
 }
 
+/* ACTIVE MENU (SOFT WHITE CARD STYLE) */
 .menu-link.active {
     background: #ffffff;
-    color: #0d6efd !important;
+    color: #3b7de7 !important;
     font-weight: 600;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.12);
 }
 
+/* === USER BOX === */
 .user-box {
     margin-top: auto;
     text-align: center;
-    background: rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.15);
     padding: 15px;
-    border-radius: 12px;
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
 }
 
+/* PROFILE IMAGE */
 .profile-img {
     width: 60px !important;
     height: 60px !important;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid rgba(255,255,255,0.4);
+    border: 2px solid rgba(255,255,255,0.7);
 }
 
+/* USER NAME */
+.user-box .fw-semibold {
+    font-size: 14px;
+    margin-top: 6px;
+    color: #fff;
+}
+
+/* ROLE */
+.user-box small {
+    opacity: 0.85;
+}
+
+/* BUTTON */
+.user-box .btn {
+    border-radius: 10px;
+}
+
+/* SCROLLBAR SOFT */
 .sidebar-custom::-webkit-scrollbar {
-    width: 5px;
+    width: 6px;
 }
 
 .sidebar-custom::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.25);
     border-radius: 10px;
 }
 </style>
@@ -93,7 +129,8 @@ $role = session()->get('role');
 
     <!-- BRAND -->
     <a href="<?= base_url('/') ?>" class="brand text-decoration-none text-white">
-        📚 BLIBIO<span class="fw-bold">TRACK</span>
+        <i class="bi bi-journal-bookmark-fill me-1"></i>
+        BLIBIO<span class="fw-bold">TRACK</span>
     </a>
 
     <div class="menu-section">MENU</div>
@@ -184,13 +221,13 @@ $role = session()->get('role');
 
     <div class="user-box">
 
-        <?php $foto = session()->get('foto'); ?>
+       <?php $foto = session()->get('foto'); ?>
 
-        <?php if (!empty($foto) && file_exists(FCPATH . 'uploads/users/' . $foto)) : ?>
-            <img src="<?= base_url('uploads/users/' . $foto) ?>" class="profile-img mb-2">
-        <?php else : ?>
-            <img src="<?= base_url('assets/img/default.png') ?>" class="profile-img mb-2">
-        <?php endif; ?>
+<?php if (!empty($foto) && file_exists(FCPATH . 'uploads/users/' . $foto)) : ?>
+    <img src="<?= base_url('uploads/users/' . $foto) ?>" class="profile-img mb-2">
+<?php else : ?>
+    <img src="<?= base_url('assets/img/default.png') ?>" class="profile-img mb-2">
+<?php endif; ?>
 
         <div class="fw-semibold text-white">
             <?= session()->get('nama') ?>

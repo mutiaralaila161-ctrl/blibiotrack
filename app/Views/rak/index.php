@@ -1,87 +1,149 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
-<div class="container py-4">
+<style>
+/* WRAPPER */
+.content > div {
+    background: #fff;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4 class="fw-bold mb-0">
-            <i class="bi bi-box-seam"></i> Data Rak
-        </h4>
+/* TITLE */
+h2 {
+    font-weight: 600;
+    margin-bottom: 15px;
+}
 
-        <a href="<?= base_url('rak/create') ?>" class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i> Tambah Rak
-        </a>
-    </div>
+/* BUTTON TAMBAH */
+a[href*="create"] {
+    background: #0d6efd;
+    color: #fff !important;
+    padding: 8px 14px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: 0.2s;
+}
+a[href*="create"]:hover {
+    background: #0b5ed7;
+}
 
-    <div class="card shadow-sm border-0">
+/* TABLE */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
 
-        <div class="card-body table-responsive">
+/* HEADER */
+table tr:first-child {
+    background: #0d6efd;
+    color: #fff;
+}
 
-            <table class="table table-striped table-hover align-middle">
+/* CELL */
+table th,
+table td {
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+}
 
-                <thead class="table-dark">
-                <tr>
-                    <th>No</th>
-                    <th>Nama Rak</th>
-                    <th>Lokasi</th>
-                    <th>Aksi</th>
-                </tr>
-                </thead>
+/* STRIPED */
+table tr:nth-child(even) {
+    background: #f8f9fa;
+}
 
-                <tbody>
+/* HOVER */
+table tr:hover {
+    background: #eef3ff;
+}
 
-                <?php if (!empty($rak)): ?>
+/* AKSI */
+td a {
+    text-decoration: none;
+    font-size: 13px;
+}
 
-                    <?php $no = 1; foreach ($rak as $r): ?>
-                        <tr>
+/* WARNA AKSI */
+td a[href*="edit"] {
+    color: #198754;
+}
+td a[href*="delete"] {
+    color: #dc3545;
+}
 
-                            <td><?= $no++ ?></td>
+/* EMPTY STATE */
+td[colspan] {
+    color: #888;
+}
+</style>
 
-                            <td class="fw-semibold">
-                                <?= esc($r['nama_rak']) ?>
-                            </td>
+<div>
 
-                            <td>
-                                <span class="badge bg-info text-dark">
-                                    <?= esc($r['lokasi']) ?>
-                                </span>
-                            </td>
+    <h2>
+        <i class="bi bi-box-seam me-1"></i>
+        Data Rak
+    </h2>
 
-                            <td class="text-nowrap">
+    <!-- BUTTON TAMBAH -->
+    <a href="<?= base_url('rak/create') ?>">
+        <i class="bi bi-plus-circle me-1"></i> Tambah Rak
+    </a>
 
-                                <a href="<?= base_url('rak/edit/'.$r['id_rak']) ?>"
-                                   class="btn btn-sm btn-warning">
-                                    <i class="bi bi-pencil-square"></i>
-                                </a>
+    <br><br>
 
-                                <a href="<?= base_url('rak/delete/'.$r['id_rak']) ?>"
-                                   class="btn btn-sm btn-danger"
-                                   onclick="return confirm('Hapus data rak ini?')">
-                                    <i class="bi bi-trash"></i>
-                                </a>
+    <!-- TABLE -->
+    <table border="1" cellpadding="5" cellspacing="0">
 
-                            </td>
+        <tr>
+            <th>No</th>
+            <th>Nama Rak</th>
+            <th>Lokasi</th>
+            <th>Aksi</th>
+        </tr>
 
-                        </tr>
-                    <?php endforeach; ?>
+        <?php if (!empty($rak)): ?>
 
-                <?php else: ?>
+            <?php $no = 1; foreach ($rak as $r): ?>
+            <tr>
 
-                    <tr>
-                        <td colspan="4" class="text-center text-muted py-4">
-                            Belum ada data rak
-                        </td>
-                    </tr>
+                <td><?= $no++ ?></td>
+                <td><?= esc($r['nama_rak']) ?></td>
+                <td><?= esc($r['lokasi']) ?></td>
 
-                <?php endif; ?>
+                <td>
 
-                </tbody>
+                    <a href="<?= base_url('rak/edit/'.$r['id_rak']) ?>">
+                        <i class="bi bi-pencil-square"></i> Edit
+                    </a>
 
-            </table>
+                    |
 
-        </div>
+                    <a href="<?= base_url('rak/delete/'.$r['id_rak']) ?>"
+                       onclick="return confirm('Hapus data rak ini?')">
+                        <i class="bi bi-trash"></i> Hapus
+                    </a>
 
-    </div>
+                </td>
+
+            </tr>
+            <?php endforeach; ?>
+
+        <?php else: ?>
+
+            <tr>
+                <td colspan="4">Belum ada data rak</td>
+            </tr>
+
+        <?php endif; ?>
+
+    </table>
 
 </div>
 

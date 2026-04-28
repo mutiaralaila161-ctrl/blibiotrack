@@ -4,106 +4,77 @@
 <head>
     <title>Print Data Peminjaman Buku</title>
 
+    <!-- Bootstrap 5 (optional untuk print lebih rapi) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
         body {
-            font-family: Arial, sans-serif;
             font-size: 12px;
-            margin: 20px;
-            color: #000;
         }
 
-        h2, h3 {
-            text-align: center;
-            margin: 0;
-        }
-
-        .subtitle {
-            text-align: center;
+        h3 {
             margin-bottom: 20px;
-            font-size: 12px;
+            font-weight: 700;
         }
 
         table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-
-        table th, table td {
-            border: 1px solid #000;
-            padding: 6px;
-            vertical-align: top;
-        }
-
-        table th {
-            background: #f2f2f2;
-            text-align: center;
-        }
-
-        .center {
-            text-align: center;
-        }
-
-        .right {
-            text-align: right;
-        }
-
-        .status-kembali {
-            color: green;
-            font-weight: bold;
-        }
-
-        .status-terlambat {
-            color: red;
-            font-weight: bold;
-        }
-
-        .status-pinjam {
-            color: orange;
-            font-weight: bold;
+            font-size: 11px;
         }
 
         @media print {
+            .no-print {
+                display: none;
+            }
+
             body {
-                margin: 0;
+                -webkit-print-color-adjust: exact;
             }
         }
-    </style>
 
+        .table thead {
+            background-color: #0d6efd !important;
+            color: white;
+        }
+    </style>
 </head>
 
 <body onload="window.print()">
 
-    <h2>DATA PEMINJAMAN BUKU</h2>
-    <div class="subtitle">
-        Sistem Perpustakaan - Laporan Data Peminjaman
-    </div>
+<div class="container mt-3">
 
-    <table>
+    <!-- HEADER -->
+    <h4 class="fw-bold mb-3">
+        📚 Data Peminjaman Buku
+    </h4>
 
-        <thead>
-        <tr>
-            <th>No</th>
-            <th>Anggota</th>
-            <th>Petugas</th>
-            <th>Buku</th>
-            <th>Tgl Pinjam</th>
-            <th>Jatuh Tempo</th>
-            <th>Tgl Kembali</th>
-            <th>Status</th>
-            <th>Denda</th>
-        </tr>
-        </thead>
+    <!-- TABLE -->
+    <div class="table-responsive">
 
-        <tbody>
+        <table class="table table-bordered table-sm align-middle">
 
-        <?php if (!empty($peminjaman)): ?>
+            <thead class="text-center">
+                <tr>
+                    <th>No</th>
+                    <th>Anggota</th>
+                    <th>Petugas</th>
+                    <th>Buku</th>
+                    <th>Tanggal Pinjam</th>
+                    <th>Jatuh Tempo</th>
+                    <th>Tanggal Kembali</th>
+                    <th>Status</th>
+                    <th>Denda</th>
+                </tr>
+            </thead>
 
-            <?php $no = 1; foreach ($peminjaman as $p): ?>
+            <tbody>
+
+            <?php if (!empty($peminjaman)): ?>
+
+                <?php $no = 1; foreach ($peminjaman as $p): ?>
 
                 <tr>
 
-                    <td class="center"><?= $no++ ?></td>
+                    <td class="text-center"><?= $no++ ?></td>
 
                     <td><?= esc($p['nama_anggota'] ?? '-') ?></td>
 
@@ -112,34 +83,36 @@
                     <td>
                         <?php if (!empty($p['detail'])): ?>
                             <?php foreach ($p['detail'] as $d): ?>
-                                - <?= esc($d['judul'] ?? '-') ?><br>
+                                • <?= esc($d['judul'] ?? '-') ?><br>
                             <?php endforeach; ?>
                         <?php else: ?>
                             -
                         <?php endif; ?>
                     </td>
 
-                    <td class="center"><?= esc($p['tanggal_pinjam'] ?? '-') ?></td>
+                    <td><?= esc($p['tanggal_pinjam'] ?? '-') ?></td>
 
-                    <td class="center"><?= esc($p['tanggal_kembali'] ?? '-') ?></td>
+                    <td class="text-nowrap">
+                        <?= esc($p['tanggal_kembali'] ?? '-') ?>
+                    </td>
 
-                    <td class="center"><?= esc($p['tanggal_dikembalikan'] ?? '-') ?></td>
+                    <td><?= esc($p['tanggal_dikembalikan'] ?? '-') ?></td>
 
                     <!-- STATUS -->
-                    <td class="center">
+                    <td class="text-center fw-semibold">
                         <?php
                         if (($p['status_label'] ?? '') == 'Kembali') {
-                            echo '<span class="status-kembali">Kembali</span>';
+                            echo '<span style="color:green;">Kembali</span>';
                         } elseif (($p['status_label'] ?? '') == 'Terlambat') {
-                            echo '<span class="status-terlambat">Terlambat</span>';
+                            echo '<span style="color:red;">Terlambat</span>';
                         } else {
-                            echo '<span class="status-pinjam">Dipinjam</span>';
+                            echo '<span style="color:orange;">Dipinjam</span>';
                         }
                         ?>
                     </td>
 
                     <!-- DENDA -->
-                    <td class="right">
+                    <td class="text-end">
                         <?php if (!empty($p['denda']) && $p['denda'] > 0): ?>
                             Rp <?= number_format($p['denda'],0,',','.') ?>
                         <?php else: ?>
@@ -149,26 +122,25 @@
 
                 </tr>
 
-            <?php endforeach; ?>
+                <?php endforeach; ?>
 
-        <?php else: ?>
+            <?php else: ?>
 
-            <tr>
-                <td colspan="9" class="center">Tidak ada data peminjaman</td>
-            </tr>
+                <tr>
+                    <td colspan="9" class="text-center">
+                        Tidak ada data peminjaman
+                    </td>
+                </tr>
 
-        <?php endif; ?>
+            <?php endif; ?>
 
-        </tbody>
+            </tbody>
 
-    </table>
+        </table>
 
-    <br><br>
-
-    <div class="right">
-        Dicetak pada: <?= date('d-m-Y H:i') ?>
     </div>
 
-</body>
+</div>
 
+</body>
 </html>

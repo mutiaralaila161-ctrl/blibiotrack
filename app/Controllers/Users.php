@@ -61,7 +61,7 @@ class Users extends BaseController
         $foto = $this->request->getFile('foto');
         $namaFoto = null;
 
-        if ($foto && $foto->isValid()) {
+        if ($foto && $foto->isValid() && !$foto->hasMoved()) {
             $namaFoto = $foto->getRandomName();
             $foto->move(FCPATH . 'uploads/users', $namaFoto);
         }
@@ -82,8 +82,14 @@ class Users extends BaseController
     // ================= EDIT =================
     public function edit($id)
     {
+        $user = $this->users->find($id);
+
+        if (!$user) {
+            return redirect()->to('/users')->with('error', 'User tidak ditemukan');
+        }
+
         return view('users/edit', [
-            'user' => $this->users->find($id)
+            'user' => $user
         ]);
     }
 
@@ -92,12 +98,16 @@ class Users extends BaseController
     {
         $user = $this->users->find($id);
 
+        if (!$user) {
+            return redirect()->to('/users')->with('error', 'User tidak ditemukan');
+        }
+
         $foto = $this->request->getFile('foto');
         $namaFoto = $user['foto'];
 
-        if ($foto && $foto->isValid() && $foto->getName() != '') {
+        if ($foto && $foto->isValid() && !$foto->hasMoved()) {
 
-            if (!empty($user['foto'])) {
+            if (!empty($user['foto']) && file_exists(FCPATH . 'uploads/users/' . $user['foto'])) {
                 @unlink(FCPATH . 'uploads/users/' . $user['foto']);
             }
 
@@ -114,7 +124,10 @@ class Users extends BaseController
         ];
 
         if ($this->request->getPost('password')) {
-            $data['password'] = password_hash($this->request->getPost('password'), PASSWORD_DEFAULT);
+            $data['password'] = password_hash(
+                $this->request->getPost('password'),
+                PASSWORD_DEFAULT
+            );
         }
 
         $this->users->update($id, $data);
@@ -122,16 +135,20 @@ class Users extends BaseController
         return redirect()->to('/users')->with('success', 'User berhasil diupdate');
     }
 
-    // ================= DELETE (AMAN ADMIN) =================
+    // ================= DELETE =================
     public function delete($id)
     {
         $user = $this->users->find($id);
+
+        if (!$user) {
+            return redirect()->back()->with('error', 'User tidak ditemukan');
+        }
 
         if ($user['role'] == 'admin') {
             return redirect()->back()->with('error', 'Admin tidak bisa dihapus');
         }
 
-        if (!empty($user['foto'])) {
+        if (!empty($user['foto']) && file_exists(FCPATH . 'uploads/users/' . $user['foto'])) {
             @unlink(FCPATH . 'uploads/users/' . $user['foto']);
         }
 
@@ -144,6 +161,10 @@ class Users extends BaseController
     public function aktifkan($id)
     {
         $user = $this->users->find($id);
+
+        if (!$user) {
+            return redirect()->back()->with('error', 'User tidak ditemukan');
+        }
 
         if ($user['role'] == 'admin') {
             return redirect()->back()->with('error', 'Admin selalu aktif');
@@ -159,6 +180,10 @@ class Users extends BaseController
     {
         $user = $this->users->find($id);
 
+        if (!$user) {
+            return redirect()->back()->with('error', 'User tidak ditemukan');
+        }
+
         if ($user['role'] == 'admin') {
             return redirect()->back()->with('error', 'Admin tidak bisa dinonaktifkan');
         }
@@ -171,49 +196,55 @@ class Users extends BaseController
     // ================= DETAIL =================
     public function detail($id)
     {
+        $user = $this->users->find($id);
+
+        if (!$user) {
+            return redirect()->to('/users')->with('error', 'User tidak ditemukan');
+        }
+
         return view('users/detail', [
-            'user' => $this->users->find($id)
+            'user' => $user
         ]);
     }
-    // ================= PRINT DATA =================
+
+    // ================= PRINT =================
     public function print()
     {
-        // Ambil filter
         $keyword = $this->request->getGet('keyword');
-        $role = $this->request->getGet('role');
+        $role    = $this->request->getGet('role');
 
-        // Builder query
         $builder = $this->users;
 
-        // Filter keyword
         if ($keyword) {
             $builder = $builder->like('nama', $keyword);
         }
 
-        // Filter role
         if ($role) {
             $builder = $builder->where('role', $role);
         }
 
-        // Ambil semua data (tanpa pagination)
         $data['users'] = $builder->findAll();
 
-        // Tampilkan view print
         return view('users/print', $data);
     }
 
-
-    // ================= WA =================
+    // ================= WHATSAPP =================
     public function wa($id)
     {
         $user = $this->users->find($id);
 
-        $pesan = "DATA USER\n\n"
-            ."Nama: {$user['nama']}\n"
-            ."Email: {$user['email']}\n"
-            ."Username: {$user['username']}\n"
-            ."Role: {$user['role']}";
+        if (!$user) {
+            return redirect()->back()->with('error', 'User tidak ditemukan');
+        }
 
-        return redirect()->to("https://wa.me/6285175017991?text=" . urlencode($pesan));
+        $pesan = "DATA USER\n\n"
+            . "Nama: {$user['nama']}\n"
+            . "Email: {$user['email']}\n"
+            . "Username: {$user['username']}\n"
+            . "Role: {$user['role']}";
+
+        return redirect()->to(
+            "https://wa.me/6285175017991?text=" . urlencode($pesan)
+        );
     }
 }

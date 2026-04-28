@@ -18,48 +18,39 @@
 
                 <div class="card-body p-4">
 
-                    <!-- Hanya petugas -->
-                    <?php if (session()->get('role') == 'petugas'): ?>
-                        <div class="mb-3">
-                            <a href="<?= base_url('transaksi/create/'.$peminjaman['id_peminjaman']) ?>"
-                               class="btn btn-outline-success btn-sm">
-                                💰 Buat Transaksi
-                            </a>
+                    <?php if (!isset($peminjaman)): ?>
+                        <div class="alert alert-danger">
+                            Data peminjaman tidak ditemukan
                         </div>
-                    <?php endif; ?>
+                    <?php else: ?>
 
+                    <!-- INFO -->
                     <form action="<?= base_url('transaksi/save') ?>" method="post">
+
+                        <?= csrf_field() ?>
 
                         <input type="hidden" name="id_peminjaman" value="<?= $peminjaman['id_peminjaman'] ?>">
 
-                        <!-- INFO PEMINJAMAN -->
                         <div class="mb-3">
                             <label class="form-label fw-semibold">ID Peminjaman</label>
-                            <input type="text"
-                                   class="form-control"
-                                   value="<?= $peminjaman['id_peminjaman'] ?>"
-                                   readonly>
+                            <input type="text" class="form-control"
+                                   value="<?= $peminjaman['id_peminjaman'] ?>" readonly>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Nama Anggota</label>
-                            <input type="text"
-                                   class="form-control"
-                                   value="<?= esc($peminjaman['nama_anggota']) ?>"
-                                   readonly>
+                            <input type="text" class="form-control"
+                                   value="<?= esc($peminjaman['nama_anggota'] ?? '-') ?>" readonly>
                         </div>
 
-                        <!-- JUMLAH DENDA -->
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Jumlah Denda (Rp)</label>
-                            <input type="number"
-                                   name="jumlah"
+                            <input type="number" name="jumlah"
                                    class="form-control"
                                    placeholder="Masukkan jumlah denda"
                                    required>
                         </div>
 
-                        <!-- BUTTON -->
                         <div class="d-flex gap-2 mt-4">
 
                             <button type="submit" class="btn btn-primary">
@@ -73,6 +64,8 @@
                         </div>
 
                     </form>
+
+                    <?php endif; ?>
 
                 </div>
 

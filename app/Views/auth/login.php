@@ -13,7 +13,7 @@
         body {
             margin: 0;
             font-family: "Segoe UI", sans-serif;
-            background: linear-gradient(135deg, #0d6efd, #6ea8fe);
+            background: linear-gradient(135deg, #a1bfec, #6ea8fe);
             min-height: 100vh;
         }
 
@@ -46,7 +46,7 @@
             content: "";
             position: absolute;
             inset: 0;
-            background: rgba(13,110,253,0.75);
+            background: rgba(192, 210, 236, 0.75);
         }
 
         .login-left-content {
@@ -68,16 +68,19 @@
             flex: 1;
             background: white;
             padding: 50px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .title {
             font-weight: bold;
-            color: #0d6efd;
+            color: #98baee;
         }
 
         .form-control:focus {
             box-shadow: none;
-            border-color: #0d6efd;
+            border-color: #8fb0e2;
         }
 
         .btn-login {
@@ -110,9 +113,11 @@
                 <h2>BLIBIOTRACK</h2>
                 <p>Sistem Perpustakaan Digital Modern</p>
                 <hr>
-                <p>📚 Kelola buku dengan mudah<br>
-                   👥 Manajemen anggota & petugas<br>
-                   ⚡ Sistem cepat & responsif</p>
+                <p>
+                    📚 Kelola buku dengan mudah<br>
+                    👥 Manajemen anggota & petugas<br>
+                    ⚡ Sistem cepat & responsif
+                </p>
             </div>
         </div>
 
@@ -120,10 +125,8 @@
         <div class="login-right">
 
             <div class="text-center mb-4">
-
                 <h3 class="title">BLIBIOTRACK</h3>
                 <small class="text-muted">Silakan login untuk melanjutkan</small>
-
             </div>
 
             <!-- ALERT -->
@@ -134,7 +137,7 @@
             <?php endif; ?>
 
             <!-- FORM -->
-            <form action="<?= base_url('/proses-login') ?>" method="post">
+            <form method="post" action="<?= base_url('login') ?>">
 
                 <div class="mb-3">
                     <label class="form-label">Username</label>
@@ -152,15 +155,18 @@
 
             </form>
 
+            <!-- BUTTON AREA -->
             <div class="text-center mt-3">
-                <a href="<?= base_url('users/create') ?>" class="btn btn-outline-success btn-sm w-100">
-                    <i class="bi bi-person-plus"></i> Daftar Akun Baru
-                     <a href="<?= base_url('restore') ?>" class="menu-link text-light">
-            <i class="bi bi-database me-2"></i> Restore DB
-        </a>
-                </a>
-            </div>
 
+                <a href="<?= base_url('users/create') ?>" class="btn btn-outline-success btn-sm w-100 mb-2">
+                    <i class="bi bi-person-plus"></i> Daftar Akun Baru
+                </a>
+
+                <a href="<?= base_url('restore') ?>" class="btn btn-outline-secondary btn-sm w-100">
+                    <i class="bi bi-database me-2"></i> Restore DB
+                </a>
+
+            </div>
 
         </div>
 

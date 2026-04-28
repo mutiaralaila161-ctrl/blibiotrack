@@ -27,9 +27,9 @@ class Denda extends BaseController
         ->join('pengembalian', 'pengembalian.id_pengembalian = denda.id_pengembalian', 'left')
         ->join('peminjaman', 'peminjaman.id_peminjaman = pengembalian.id_peminjaman', 'left')
         ->join('anggota', 'anggota.id_anggota = peminjaman.id_anggota', 'left')
-        ->join('users', 'users.id = anggota.user_id', 'left')
+        ->join('users', 'users.id_user = anggota.id_user', 'left') // ✅ FIX
         ->join('petugas', 'petugas.id_petugas = denda.verified_by', 'left')
-        ->join('users AS verif', 'verif.id = petugas.user_id', 'left');
+        ->join('users AS verif', 'verif.id_user = petugas.id_user', 'left'); // ✅ FIX
 
         $data = $builder->get()->getResultArray();
 
@@ -83,7 +83,7 @@ class Denda extends BaseController
     // ================= VERIFIKASI =================
     public function verifikasi($id)
     {
-        if (session()->get('role') != 'petugas') {
+        if (session()->get('role') != 'petugas : admin') {
             return redirect()->back();
         }
 

@@ -3,10 +3,10 @@
 namespace App\Controllers;
 
 use App\Models\UsersModel;
-use CodeIgniter\Controller;
 
-class Auth extends Controller
+class Auth extends BaseController
 {
+    // ================= LOGIN =================
     public function login()
     {
         return view('auth/login');
@@ -15,13 +15,12 @@ class Auth extends Controller
     public function prosesLogin()
     {
         $session = session();
-        $db = \Config\Database::connect();
-        $usersModel = new UsersModel();
+        $model = new UsersModel();
 
         $username = $this->request->getPost('username');
         $password = $this->request->getPost('password');
 
-        $user = $usersModel->getUsersByUsername($username);
+        $user = $model->getUsersByUsername($username);
 
         if (!$user) {
             return redirect()->to('/login')->with('error', 'Username tidak ditemukan');
@@ -35,64 +34,55 @@ class Auth extends Controller
             return redirect()->to('/login')->with('error', 'Password salah');
         }
 
-        $idAnggota = null;
-        $idPetugas = null;
-
-        // ================= ANGGOTA =================
-        if ($user['role'] == 'anggota') {
-
-            $anggota = $db->table('anggota')
-                ->where('user_id', $user['id'])
-                ->get()
-                ->getRowArray();
-
-            if (!$anggota) {
-                $db->table('anggota')->insert([
-                    'user_id' => $user['id'],
-                    'tanggal_daftar' => date('Y-m-d')
-                ]);
-
-                $idAnggota = $db->insertID();
-            } else {
-                $idAnggota = $anggota['id_anggota'];
-            }
-        }
-
-        // ================= PETUGAS =================
-        if ($user['role'] == 'petugas') {
-
-            $petugas = $db->table('petugas')
-                ->where('user_id', $user['id'])
-                ->get()
-                ->getRowArray();
-
-            if (!$petugas) {
-                $db->table('petugas')->insert([
-                    'user_id' => $user['id'],
-                    'jabatan' => 'petugas'
-                ]);
-
-                $idPetugas = $db->insertID();
-            } else {
-                $idPetugas = $petugas['id_petugas'];
-            }
-        }
-
-        // ================= SESSION =================
         $session->set([
-            'id'         => $user['id'],
-            'nama'       => $user['nama'],
-            'role'       => $user['role'],
-            'id_anggota' => $idAnggota,
-            'id_petugas' => $idPetugas,
-            'foto'       => $user['foto'] ?? null,
-            'logged_in'  => true
+            'id_user' => $user['id_user'],
+            'nama'    => $user['nama'],
+            'role'    => $user['role'],
+            'foto'   => $user['foto'],
+            'logged_in' => true
         ]);
 
-        // ================= REDIRECT CLEAN =================
         return redirect()->to('/dashboard');
     }
 
+    // ================= REGISTER FORM =================
+    public function registerForm()
+    {
+        return view('auth/register');
+    }
+
+    // ================= REGISTER PROCESS =================
+    public function register()
+    {
+        $model = new UsersModel();
+
+        $nama = $this->request->getPost('nama');
+        $email = $this->request->getPost('email');
+        $username = $this->request->getPost('username');
+        $password = $this->request->getPost('password');
+
+        if (!$nama || !$username || !$password) {
+            return redirect()->back()->with('error', 'Data wajib diisi');
+        }
+
+        $cek = $model->where('username', $username)->first();
+        if ($cek) {
+            return redirect()->back()->with('error', 'Username sudah dipakai');
+        }
+
+        $model->insert([
+            'nama'     => $nama,
+            'email'    => $email,
+            'username' => $username,
+            'password' => password_hash($password, PASSWORD_DEFAULT),
+            'role'     => 'anggota',
+            'status'   => 'aktif'
+        ]);
+
+        return redirect()->to('/login')->with('success', 'Berhasil daftar');
+    }
+
+    // ================= LOGOUT =================
     public function logout()
     {
         session()->destroy();

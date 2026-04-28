@@ -153,7 +153,7 @@
                                     Detail
                                 </a>
 
-                                <?php if (session()->get('role') == 'petugas' && ($p['status_label'] ?? '') == 'Menunggu Approval'): ?>
+                                <?php if (in_array(session()->get('role'), ['admin', 'petugas']) && ($p['status_label'] ?? '') == 'Menunggu Approval'): ?>
                                     <a class="btn btn-sm btn-success"
                                        href="<?= base_url('peminjaman/approve/'.$p['id_peminjaman']) ?>">
                                         ✔

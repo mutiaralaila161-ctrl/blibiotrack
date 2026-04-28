@@ -23,12 +23,11 @@ class Buku extends BaseController
     $builder = $this->buku->getBukuPaginate($keyword);
 
     return view('buku/index', [
-        'buku' => $this->buku->paginate(10), // ✅ paginate dari MODEL
-        'pager' => $this->buku->pager,
+        'buku' => $builder->paginate(10), // ✅ paginate di sini
+        'pager' => $this->buku->pager,    // ✅ ini jadi aktif
         'keyword' => $keyword
     ]);
 }
-
     // ================= CREATE =================
     public function create()
     {
@@ -80,22 +79,7 @@ class Buku extends BaseController
     // ================= DETAIL (FIXED CLEAN VERSION) =================
     public function detail($id)
 {
-    $buku = $this->db->table('buku')
-        ->select('
-            buku.*,
-            kategori.nama_kategori,
-            penulis.nama_penulis,
-            penerbit.nama_penerbit,
-            rak.nama_rak
-        ')
-        ->join('kategori', 'kategori.id_kategori = buku.id_kategori', 'left')
-        ->join('penulis', 'penulis.id_penulis = buku.id_penulis', 'left')
-        ->join('penerbit', 'penerbit.id_penerbit = buku.id_penerbit', 'left')
-        ->join('buku_rak', 'buku_rak.id_buku = buku.id_buku', 'left')
-        ->join('rak', 'rak.id_rak = buku_rak.id_rak', 'left')
-        ->where('buku.id_buku', $id)
-        ->get()
-        ->getRowArray();
+    $buku = $this->buku->getBukuById($id);
 
     if (!$buku) {
         return redirect()->to('/buku')->with('error', 'Data tidak ditemukan');
@@ -146,6 +130,22 @@ class Buku extends BaseController
 
         return redirect()->to('/buku')->with('success', 'Data berhasil diupdate');
     }
+    public function edit($id)
+{
+    $buku = $this->buku->find($id);
+
+    if (!$buku) {
+        return redirect()->to('/buku')->with('error', 'Data tidak ditemukan');
+    }
+
+    return view('buku/edit', [
+        'buku' => $buku,
+        'kategori' => $this->db->table('kategori')->get()->getResultArray(),
+        'penulis'  => $this->db->table('penulis')->get()->getResultArray(),
+        'penerbit' => $this->db->table('penerbit')->get()->getResultArray(),
+        'rak'      => $this->db->table('rak')->get()->getResultArray(),
+    ]);
+}
 
     // ================= DELETE =================
     public function delete($id)

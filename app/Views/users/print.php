@@ -6,68 +6,51 @@
 
     <style>
         body {
-            font-family: Arial, sans-serif;
-            font-size: 12px;
-            margin: 20px;
+            font-family: "Segoe UI", sans-serif;
             color: #333;
+            padding: 20px;
         }
 
-        h2, h3 {
+        /* HEADER */
+        h3 {
             text-align: center;
-            margin: 0;
+            margin-bottom: 5px;
         }
 
-        .subtitle {
+        .sub-title {
             text-align: center;
+            font-size: 13px;
             margin-bottom: 20px;
-            font-size: 12px;
             color: #666;
         }
 
+        /* TABLE */
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 15px;
+            font-size: 13px;
         }
 
-        table thead {
-            background-color: #f2f2f2;
-        }
-
-        table th, table td {
-            border: 1px solid #000;
-            padding: 8px;
-            text-align: left;
-        }
-
-        table th {
-            text-align: center;
-            font-weight: bold;
-        }
-
-        .center {
-            text-align: center;
-        }
-
-        .badge {
-            padding: 3px 6px;
-            border-radius: 4px;
-            font-size: 11px;
-        }
-
-        .admin {
-            background: #000;
-            color: #fff;
-        }
-
-        .petugas {
+        thead {
             background: #0d6efd;
-            color: #fff;
+            color: white;
         }
 
-        .anggota {
-            background: #198754;
-            color: #fff;
+        th, td {
+            padding: 8px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        /* FOOTER */
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            text-align: right;
         }
 
         /* PRINT SETTING */
@@ -76,8 +59,8 @@
                 margin: 0;
             }
 
-            button {
-                display: none;
+            h3 {
+                margin-top: 0;
             }
         }
     </style>
@@ -85,19 +68,17 @@
 
 <body onload="window.print()">
 
-    <h2>DATA USERS</h2>
-    <div class="subtitle">
-        Sistem Perpustakaan - Laporan Data User
-    </div>
+    <h3>Data Users</h3>
+    <div class="sub-title">Laporan Data Pengguna Sistem</div>
 
     <table>
         <thead>
             <tr>
-                <th width="5%">No</th>
+                <th>No</th>
                 <th>Nama</th>
                 <th>Email</th>
                 <th>Username</th>
-                <th width="15%">Role</th>
+                <th>Role</th>
             </tr>
         </thead>
 
@@ -105,32 +86,22 @@
             <?php if (!empty($users)): ?>
                 <?php $no = 1; foreach ($users as $u): ?>
                     <tr>
-                        <td class="center"><?= $no++ ?></td>
+                        <td><?= $no++ ?></td>
                         <td><?= esc($u['nama']) ?></td>
                         <td><?= esc($u['email']) ?></td>
                         <td><?= esc($u['username']) ?></td>
-                        <td class="center">
-                            <?php if ($u['role'] == 'admin'): ?>
-                                <span class="badge admin">Admin</span>
-                            <?php elseif ($u['role'] == 'petugas'): ?>
-                                <span class="badge petugas">Petugas</span>
-                            <?php else: ?>
-                                <span class="badge anggota">Anggota</span>
-                            <?php endif; ?>
-                        </td>
+                        <td><?= ucfirst($u['role']) ?></td>
                     </tr>
                 <?php endforeach; ?>
             <?php else: ?>
                 <tr>
-                    <td colspan="5" class="center">Tidak ada data</td>
+                    <td colspan="5">Tidak ada data</td>
                 </tr>
             <?php endif; ?>
         </tbody>
     </table>
 
-    <br><br>
-
-    <div style="text-align:right; font-size:12px;">
+    <div class="footer">
         Dicetak pada: <?= date('d-m-Y H:i') ?>
     </div>
 

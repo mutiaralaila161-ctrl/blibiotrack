@@ -1,30 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
+<?= $this->extend('layouts/main') ?>
+<?= $this->section('content') ?>
 
-<head>
-    <meta charset="UTF-8">
-    <title>Register</title>
+<div class="container mt-5">
 
-    <link href="<?= base_url('assets/css/bootstrap.min.css') ?>" rel="stylesheet">
-</head>
+    <div class="card shadow p-4" style="max-width:500px; margin:auto;">
 
-<body class="bg-light">
+        <h4 class="text-center mb-4">Register Anggota</h4>
 
-<div class="container d-flex justify-content-center align-items-center vh-100">
+        <form method="post" action="<?= base_url('register') ?>">
 
-    <div class="card shadow" style="width: 380px;">
-
-        <div class="card-header bg-success text-white text-center">
-            <h4 class="mb-0">Register</h4>
-        </div>
-
-        <div class="card-body">
-
-            <form action="<?= base_url('register') ?>" method="post" enctype="multipart/form-data">
+    <?= csrf_field() ?>
 
     <div class="mb-3">
         <label>Nama</label>
         <input type="text" name="nama" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+        <label>Email</label>
+        <input type="email" name="email" class="form-control">
     </div>
 
     <div class="mb-3">
@@ -33,38 +27,16 @@
     </div>
 
     <div class="mb-3">
-        <label>Email</label>
-        <input type="email" name="email" class="form-control" required>
-    </div>
-
-    <div class="mb-3">
         <label>Password</label>
         <input type="password" name="password" class="form-control" required>
     </div>
 
-    <div class="mb-3">
-        <label>Role</label>
-        <select name="role" class="form-control">
-            <option value="anggota">Anggota</option>
-            <option value="petugas">Petugas</option>
-        </select>
-    </div>
-
-    <!-- FOTO PROFIL -->
-    <div class="mb-3">
-        <label>Foto Profil</label>
-        <input type="file" name="foto" class="form-control" accept="image/*">
-    </div>
-
-    <button class="btn btn-success w-100">
-        Daftar
-    </button>
+    <button class="btn btn-primary w-100">Register</button>
 
 </form>
-        </div>
+
     </div>
 
 </div>
 
-</body>
-</html>
+<?= $this->endSection() ?>
